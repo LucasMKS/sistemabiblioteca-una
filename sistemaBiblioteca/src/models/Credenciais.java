@@ -6,16 +6,15 @@ public class Credenciais {
     private String nome;
     private String tipo;
 
+    public Credenciais(String nome, String tipo) {
+    	this(nome, tipo, "", "");
+    }
+
     public Credenciais(String login, String senha, String nome, String tipo) {
         this.login = login;
         this.senha = senha;
         this.nome = nome;
         this.tipo = tipo;
-    }
-    
-    public Credenciais(String login, String senha) {
-    	this.login = login;
-        this.senha = senha;
     }
 
     // Getters e Setters
