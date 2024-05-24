@@ -1,6 +1,8 @@
+import java.io.IOException;
 import java.util.Scanner;
 import controllers.AutenticacaoController;
 import controllers.FuncionarioController;
+import controllers.MenuController;
 import models.Credenciais;
 import utils.MenuFuncionarios;
 
@@ -19,6 +21,19 @@ public class Main {
         }
     }
 
+    public static void clearConsole() {
+        try {
+            if (System.getProperty("os.name").contains("Windows")) {
+                new ProcessBuilder("cmd", "/c", "cls").inheritIO().start().waitFor();
+            } else {
+                System.out.print("\033[H\033[2J");
+                System.out.flush();
+            }
+        } catch (IOException | InterruptedException ex) {
+            ex.printStackTrace();
+        }
+    }
+
     private static void realizarLogin() {
         System.out.println("Digite seu login:");
         String login = scanner.nextLine();
@@ -30,26 +45,20 @@ public class Main {
         Credenciais usuarioAutenticado = autenticacaoController.autenticarUsuario(credenciaisValidas);
 
         if (usuarioAutenticado != null) {
+
+            clearConsole();
             System.out.println("Login realizado com sucesso! Bem vindo " + usuarioAutenticado.getNome());
-            switch (usuarioAutenticado.getTipo()) {
-                case "funcionario":
-                    mostrarMenuFuncionario();
-                    break;
-                case "administrador":
-                    mostrarMenuAdministrador();
-                    break;
-                case "aluno":
-                	// mostrarMenuAluno();
-                default:
-                    System.out.println("Acesso não autorizado para o tipo de usuário.");
-                    break;
-            }
+
+            String tipoUser = usuarioAutenticado.getTipo();
+
+            MenuController.mostrarMenu(tipoUser);
+
         } else {
             System.out.println("Login ou senha inválidos.");
         }
     }
 
-    private static void mostrarMenuFuncionario() {
+    /*private static void mostrarMenuFuncionario() {
         boolean continuar = true;
         while (continuar) {
             System.out.println("\nMenu Funcionário:");
@@ -115,7 +124,7 @@ public class Main {
                     System.out.println("Opção inválida, tente novamente.");
             }
         }
-    }
+    }*/
 
     private static void gerenciarFuncionarios() {
         System.out.println("Gerenciamento de Funcionários (1 para adicionar, 2 para atualizar):");
@@ -123,7 +132,7 @@ public class Main {
         scanner.nextLine();  // Consumir linha
 
         if (acao == 1) {
-            System.out.println("Adicionando novo funcionário...");
+            
             // Implementar adição de funcionário
         } else if (acao == 2) {
             System.out.println("Atualizando funcionário existente...");
