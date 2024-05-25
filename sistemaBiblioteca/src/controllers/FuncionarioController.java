@@ -2,6 +2,8 @@ package controllers;
 
 import models.Livro;
 import utils.ConnectionSQL;
+import views.Livros;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
@@ -61,6 +63,29 @@ public class FuncionarioController {
         }
     }
 
+    public static int processarOpcao(int opcao) {
+        switch (opcao) {
+            case 1:
+                break;
+            case 2:
+            //TO DO
+                break;
+            case 3:
+            //TO DO
+                break;
+            case 4:
+            System.out.println("teste");
+            Livros teste = new Livros();
+            teste.cadastrarLivro();
+            //menuOperations.cadastrarLivro();
+
+            break;
+            default:
+                System.out.println("Opção inválida");
+        }
+
+        return -1;
+    }
     
     // Adicionar mais funcionalidades conforme a necessidade do sistema
 }
