@@ -1,4 +1,4 @@
-package views;
+package views.menus;
 
 public class MenuAdministrador extends MenuFuncionario {
     public static void mostrarOpcoes() {

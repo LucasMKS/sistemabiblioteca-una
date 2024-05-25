@@ -1,13 +1,10 @@
-import java.io.IOException;
 import java.util.Scanner;
 import controllers.AutenticacaoController;
 import controllers.FuncionarioController;
 import models.Credenciais;
-import utils.MenuFuncionarios;
-import views.MenuAluno;
-import views.MenuAdministrador;
-import views.MenuFuncionario;
+import views.menus.*;
 import utils.ClearConsole;
+import utils.MenuFuncionarios;
 
 public class Main {
     private static final Scanner scanner = new Scanner(System.in);
@@ -33,6 +30,7 @@ public class Main {
         AutenticacaoController autenticacaoController = new AutenticacaoController();
         Credenciais credenciaisValidas = new Credenciais(login, senha);
         Credenciais usuarioAutenticado = autenticacaoController.autenticarUsuario(credenciaisValidas);
+        
 
         if (usuarioAutenticado != null) {
 
@@ -41,7 +39,25 @@ public class Main {
 
             String tipoUser = usuarioAutenticado.getTipo();
 
-            MenuAdministrador.mostrarOpcoes();
+            if(tipoUser.equals("administrador"))
+            {
+                MenuAdministrador.mostrarOpcoes();
+            }else if(tipoUser.equals("funcionario"))
+            {
+                MenuFuncionario.mostrarOpcoes();
+                System.out.println("Digite sua opçao:");
+                int opcao = scanner.nextInt();
+                FuncionarioController.processarOpcao(opcao);
+            }else if(tipoUser.equals("aluno"))
+            {
+                MenuAluno.mostrarOpcoes();
+                System.out.println("Digite sua opçao:");
+                //int opcao = scanner.nextInt();
+                //FuncionarioController.processarOpcao(opcao);
+            }else{
+                System.out.println("Voce nao tem permissao para utilizar o sistema!");
+            }
+
             System.err.println("10.Sair");
 
         } else {
