@@ -1,6 +1,5 @@
 import java.util.Scanner;
 
-import controllers.AdministradorController;
 import controllers.AutenticacaoController;
 import models.Credenciais;
 import views.menus.*;
@@ -42,7 +41,7 @@ public class Main {
                 case "administrador":
                     MenuAdministrador.mostrarOpcoes();
                     opcao = scanner.nextInt();
-                    AdministradorController.processarOpcao(opcao);
+                    MenuAdministrador.processarOpcao(opcao);
                     System.out.println("\nDigite sua opção:");
                     break;
                 case "funcionario":
