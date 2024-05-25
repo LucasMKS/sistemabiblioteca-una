@@ -1,9 +1,32 @@
 package controllers;
 
 import utils.ConnectionSQL;
+import views.menus.MenuFuncionario;
+
 import java.sql.*;
 
 public class AdministradorController extends FuncionarioController {
+
+    public static int processarOpcao(int opcao) {
+        switch (opcao) {
+            case 1:
+                break;
+            case 2:
+            //TO DO
+                break;
+            case 3:
+            //TO DO
+                break;
+            case 4:
+            MenuFuncionario.processarOpcao(opcao);
+
+            break;
+            default:
+                System.out.println("Opção inválida");
+        }
+
+        return -1;
+    }
 
     public boolean adicionarFuncionario(String nome, String login, String senha, String tipo) {
         String sql = "INSERT INTO funcionarios (nome, login, senha, tipo) VALUES (?, ?, ?, ?)";

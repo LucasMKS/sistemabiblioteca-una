@@ -7,9 +7,4 @@ public class MenuAdministrador extends MenuFuncionario {
         System.out.println("8. Alterar permissoes usuario");
         System.out.println("9. Cadastrar usuario");
     }
-
-
-    public static void processarOpcao(int opcao) {
-        // Processar opções específicas para funcionário
-    }
 }

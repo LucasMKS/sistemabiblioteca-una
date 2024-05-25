@@ -2,18 +2,31 @@ package controllers;
 
 import models.Livro;
 import utils.ConnectionSQL;
-import views.Livros;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.util.Scanner;
 import java.sql.Date;
 
 
 public class FuncionarioController {
 
     // Método para cadastrar um novo livro no sistema
-    public boolean cadastrarLivro(Livro livro) {
+    public static boolean cadastrarLivro() {
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("Informe o título do livro:");
+        String titulo = scanner.nextLine();
+        System.out.println("Informe o autor do livro:");
+        String autor = scanner.nextLine();
+        System.out.println("Informe o ISBN:");
+        String isbn = scanner.nextLine();
+        System.out.println("Informe a categoria:");
+        String categoria = scanner.nextLine();
+
+        Livro livro = new Livro(titulo, autor, isbn, categoria);
+        scanner.close();
+
         String sql = "INSERT INTO livros (titulo, autor, isbn, categoria) VALUES (?, ?, ?, ?)";
         try (Connection conn = ConnectionSQL.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
@@ -27,10 +40,21 @@ public class FuncionarioController {
             System.out.println("Erro ao cadastrar livro: " + e.getMessage());
             return false;
         }
+
+        
     }
 
     // Método para registrar um empréstimo de livro
-    public boolean registrarEmprestimo(int livroId, int usuarioId) {
+    public static boolean registrarEmprestimo() {
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("Informe o ID do livro:");
+        int livroId = scanner.nextInt();
+
+        System.out.println("Informe o ID do usuario:");
+        int usuarioId = scanner.nextInt();
+
+
+        scanner.close();
         String sql = "INSERT INTO emprestimos (livro_id, usuario_id, data_emprestimo) VALUES (?, ?, ?)";
         // Obtém a data atual
         Date dataEmprestimo = new Date(System.currentTimeMillis());
@@ -61,30 +85,6 @@ public class FuncionarioController {
             System.out.println("Erro ao registrar devolução: " + e.getMessage());
             return false;
         }
-    }
-
-    public static int processarOpcao(int opcao) {
-        switch (opcao) {
-            case 1:
-                break;
-            case 2:
-            //TO DO
-                break;
-            case 3:
-            //TO DO
-                break;
-            case 4:
-            System.out.println("teste");
-            Livros teste = new Livros();
-            teste.cadastrarLivro();
-            //menuOperations.cadastrarLivro();
-
-            break;
-            default:
-                System.out.println("Opção inválida");
-        }
-
-        return -1;
     }
     
     // Adicionar mais funcionalidades conforme a necessidade do sistema
