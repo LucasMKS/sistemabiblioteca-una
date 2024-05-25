@@ -39,26 +39,32 @@ public class Main {
 
             String tipoUser = usuarioAutenticado.getTipo();
 
-            if(tipoUser.equals("administrador"))
-            {
-                MenuAdministrador.mostrarOpcoes();
-            }else if(tipoUser.equals("funcionario"))
-            {
-                MenuFuncionario.mostrarOpcoes();
-                System.out.println("Digite sua opçao:");
-                int opcao = scanner.nextInt();
-                FuncionarioController.processarOpcao(opcao);
-            }else if(tipoUser.equals("aluno"))
-            {
-                MenuAluno.mostrarOpcoes();
-                System.out.println("Digite sua opçao:");
-                //int opcao = scanner.nextInt();
-                //FuncionarioController.processarOpcao(opcao);
-            }else{
+            switch(tipoUser){
+
+                case "administrador":
+                    MenuAdministrador.mostrarOpcoes();
+                    break;
+                
+                case "aluno":
+                    MenuAluno.mostrarOpcoes();
+                    System.out.println("Digite sua opçao:");
+                break;
+                
+                case "funcionario":
+                    MenuFuncionario.mostrarOpcoes();
+                    System.out.println("Digite sua opçao:");
+                    int opcao = scanner.nextInt();
+                    FuncionarioController.processarOpcao(opcao);
+                    break;
+
+                default:
+
                 System.out.println("Voce nao tem permissao para utilizar o sistema!");
+                break;
+
             }
 
-            System.err.println("10.Sair");
+            System.out.println("10.Sair");
 
         } else {
             System.out.println("Login ou senha inválidos.");
