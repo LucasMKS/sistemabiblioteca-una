@@ -3,6 +3,7 @@ package controllers;
 import models.Livro;
 import utils.ConnectionSQL;
 import java.sql.Connection;
+import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -123,12 +124,12 @@ public class LivroController {
     
 
     // Método para registrar a devolução de um livro
-    public boolean registrarDevolucao(int emprestimoId, Date dataDevolucao) {
+    /*public boolean devolverLivro(String[] dados) {
         String sql = "UPDATE emprestimos SET data_devolucao = ? WHERE id = ?";
         try (Connection conn = ConnectionSQL.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
-            pstmt.setDate(1, dataDevolucao);
-            pstmt.setInt(2, emprestimoId);
+            pstmt.setDate(1, dados[0]);
+            pstmt.setInt(2, dados[1]);
             pstmt.executeUpdate();
             return true;
         } catch (SQLException e) {
@@ -136,4 +137,36 @@ public class LivroController {
             return false;
         }
     }
+    */
+
+    public static void listarLivros() {
+        String sql = "SELECT id_livro, titulo, autor, isbn, categoria, quantidade FROM livros";
+
+        try (Connection conn = ConnectionSQL.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(sql);
+             ResultSet rs = pstmt.executeQuery()) {
+
+            // Imprimir cabeçalhos
+            System.out.printf("%-10s %-30s %-20s %-15s %-30s %-10s%n", 
+                              "ID", "Título", "Autor", "ISBN", "Categoria", "Quantidade");
+            System.out.println("--------------------------------------------------------------------------------------------------------------------------");
+
+            while (rs.next()) {
+                int idLivro = rs.getInt("id_livro");
+                String titulo = rs.getString("titulo");
+                String autor = rs.getString("autor");
+                String isbn = rs.getString("isbn");
+                String categoria = rs.getString("categoria");
+                int quantidade = rs.getInt("quantidade");
+
+                // Imprimir dados
+                System.out.printf("%-10d %-30s %-20s %-15s %-30s %-10d%n", 
+                                  idLivro, titulo, autor, isbn, categoria, quantidade);
+            }
+
+        } catch (SQLException e) {
+            System.out.println("Erro ao listar livros: " + e.getMessage());
+        }
+    }
+
 }
