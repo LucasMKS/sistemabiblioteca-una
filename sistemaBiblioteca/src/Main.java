@@ -1,6 +1,6 @@
 import java.util.Scanner;
-
 import controllers.AutenticacaoController;
+import controllers.FuncionarioController;
 import models.Credenciais;
 import views.menus.*;
 import utils.ClearConsole;
@@ -36,32 +36,32 @@ public class Main {
 
             String tipoUser = usuarioAutenticado.getTipo();
 
-            int opcao = 0;
-            switch (tipoUser) {
+            switch(tipoUser){
+
                 case "administrador":
                     MenuAdministrador.mostrarOpcoes();
-                    opcao = scanner.nextInt();
-                    MenuAdministrador.processarOpcao(opcao);
-                    System.out.println("\nDigite sua opção:");
                     break;
-                case "funcionario":
-                    MenuFuncionario.mostrarOpcoes();
-                    opcao = scanner.nextInt();
-                    MenuFuncionario.processarOpcao(opcao);
-                    System.out.println("\nDigite sua opção:");
-                    break;
+                
                 case "aluno":
                     MenuAluno.mostrarOpcoes();
-                    opcao = scanner.nextInt();
-                    MenuAluno.processarOpcao(opcao);
-                    System.out.println("\nDigite sua opção:");
+                    System.out.println("Digite sua opçao:");
+                break;
+                
+                case "funcionario":
+                    MenuFuncionario.mostrarOpcoes();
+                    System.out.println("Digite sua opçao:");
+                    int opcao = scanner.nextInt();
+                    FuncionarioController.processarOpcao(opcao);
                     break;
+
                 default:
-                    System.out.println("Voce nao tem permissao para utilizar o sistema!");
-                    break;
+
+                System.out.println("Voce nao tem permissao para utilizar o sistema!");
+                break;
+
             }
 
-            System.err.println("10.Sair");
+            System.out.println("10.Sair");
 
         } else {
             System.out.println("Login ou senha inválidos.");

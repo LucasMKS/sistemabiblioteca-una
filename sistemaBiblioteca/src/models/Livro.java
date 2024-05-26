@@ -6,12 +6,14 @@ public class Livro {
     private String autor;
     private String ISBN;
     private String categoria;
+    private String quantidade;
 
-    public Livro(String titulo, String autor, String ISBN, String categoria) {
+    public Livro(String titulo, String autor, String ISBN, String categoria, String quantidade) {
         this.titulo = titulo;
         this.autor = autor;
         this.ISBN = ISBN;
         this.categoria = categoria;
+        this.quantidade = quantidade;
     }
 
     // Getters e Setters
@@ -53,5 +55,13 @@ public class Livro {
 
     public void setCategoria(String categoria) {
         this.categoria = categoria;
+    }
+
+    public String getQuantidade() {
+        return quantidade;
+    }
+
+    public void setQuantidade(String quantidade) {
+        this.quantidade = quantidade;
     }
 }
