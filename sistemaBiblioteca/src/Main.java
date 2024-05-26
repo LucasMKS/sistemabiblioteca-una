@@ -60,7 +60,7 @@ public class Main {
                     System.out.println("Voce nao tem permissao para utilizar o sistema!");
                     break;
             }
-asdasdasdasdas
+asdasdasaa
             System.err.println("10.Sair");
 
         } else {
