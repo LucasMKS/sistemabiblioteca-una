@@ -4,12 +4,9 @@ import controllers.FuncionarioController;
 import models.Credenciais;
 import views.menus.*;
 import utils.ClearConsole;
-import utils.MenuFuncionarios;
 
 public class Main {
     private static final Scanner scanner = new Scanner(System.in);
-    private static FuncionarioController funcionarioController = new FuncionarioController();
-    private static MenuFuncionarios menuOperations = new MenuFuncionarios(funcionarioController, scanner);
 
     public static void main(String[] args) {
         try {
@@ -70,22 +67,4 @@ public class Main {
             System.out.println("Login ou senha inválidos.");
         }
     }
-
-    private static void gerenciarFuncionarios() {
-        System.out.println("Gerenciamento de Funcionários (1 para adicionar, 2 para atualizar):");
-        int acao = scanner.nextInt();
-        scanner.nextLine();  // Consumir linha
-
-        if (acao == 1) {
-            
-            // Implementar adição de funcionário
-        } else if (acao == 2) {
-            System.out.println("Atualizando funcionário existente...");
-            // Implementar atualização de funcionário
-        } else {
-            System.out.println("Ação inválida.");
-        }
-    }
-
-    // Outros métodos...
 }
