@@ -16,7 +16,6 @@ public class Livro {
         this.quantidade = quantidade;
     }
 
-    // Getters e Setters
     public int getId() {
         return id;
     }

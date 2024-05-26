@@ -2,7 +2,6 @@ package controllers;
 
 import utils.ConnectionSQL;
 import views.menus.MenuFuncionario;
-
 import java.sql.*;
 
 public class AdministradorController extends FuncionarioController {

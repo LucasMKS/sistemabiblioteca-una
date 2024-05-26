@@ -1,4 +1,6 @@
 import java.util.Scanner;
+
+import controllers.AlunoController;
 import controllers.AutenticacaoController;
 import controllers.FuncionarioController;
 import models.Credenciais;
@@ -19,52 +21,57 @@ public class Main {
     }
 
     private static void realizarLogin() {
-        System.out.println("Digite seu login:");
-        String login = scanner.nextLine();
-        System.out.println("Digite sua senha:");
-        String senha = scanner.nextLine();
 
-        AutenticacaoController autenticacaoController = new AutenticacaoController();
-        Credenciais credenciaisValidas = new Credenciais(login, senha);
-        Credenciais usuarioAutenticado = autenticacaoController.autenticarUsuario(credenciaisValidas);
-        
+        while (true) {
+            System.out.println("Digite seu login:");
+            String login = scanner.nextLine();
+            System.out.println("Digite sua senha:");
+            String senha = scanner.nextLine();
 
-        if (usuarioAutenticado != null) {
+            AutenticacaoController autenticacaoController = new AutenticacaoController();
+            Credenciais credenciaisValidas = new Credenciais(login, senha);
+            Credenciais usuarioAutenticado = autenticacaoController.autenticarUsuario(credenciaisValidas);
 
-            ClearConsole.clear();
-            System.out.println("Login realizado com sucesso! Bem vindo " + usuarioAutenticado.getNome());
+            if (usuarioAutenticado != null) {
 
-            String tipoUser = usuarioAutenticado.getTipo();
+                ClearConsole.clear();
+                System.out.println("Login realizado com sucesso! Bem vindo " + usuarioAutenticado.getNome());
 
-            switch(tipoUser){
+                String tipoUser = usuarioAutenticado.getTipo();
 
-                case "administrador":
-                    MenuAdministrador.mostrarOpcoes();
-                    break;
-                
-                case "aluno":
-                    MenuAluno.mostrarOpcoes();
-                    System.out.println("Digite sua opçao:");
+                switch (tipoUser) {
+
+                    case "administrador":
+                        MenuAdministrador.mostrarOpcoes();
+                        break;
+
+                    case "aluno":
+                        MenuAluno.mostrarOpcoes();
+                        System.out.println("Digite sua opçao:");
+                        int opcao = scanner.nextInt();
+                        AlunoController.processarOpcao(opcao, credenciaisValidas);
+                        break;
+
+                    case "funcionario":
+                        MenuFuncionario.mostrarOpcoes();
+                        System.out.println("Digite sua opçao:");
+                        int opcao1 = scanner.nextInt();
+                        FuncionarioController.processarOpcao(opcao1);
+                        break;
+
+                    default:
+
+                        System.out.println("Voce nao tem permissao para utilizar o sistema!");
+                        break;
+
+                }
+
+                System.out.println("10.Sair");
                 break;
-                
-                case "funcionario":
-                    MenuFuncionario.mostrarOpcoes();
-                    System.out.println("Digite sua opçao:");
-                    int opcao = scanner.nextInt();
-                    FuncionarioController.processarOpcao(opcao);
-                    break;
 
-                default:
-
-                System.out.println("Voce nao tem permissao para utilizar o sistema!");
-                break;
-
+            } else {
+                System.out.println("Login ou senha inválidos.");
             }
-
-            System.out.println("10.Sair");
-
-        } else {
-            System.out.println("Login ou senha inválidos.");
         }
     }
 }

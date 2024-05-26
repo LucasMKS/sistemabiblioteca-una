@@ -3,15 +3,13 @@ package models;
 public class Usuario {
     private int id;
     private String nome;
-    private String tipo; // Funcionário ou Aluno
-    // Adicione mais atributos conforme necessário
+    private String tipo;
 
     public Usuario(String nome, String tipo) {
         this.nome = nome;
         this.tipo = tipo;
     }
 
-    // Getters e Setters
     public int getId() {
         return id;
     }
