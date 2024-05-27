@@ -17,7 +17,6 @@ public class Credenciais {
         this.tipo = tipo;
     }
 
-    // Getters e Setters
     public String getLogin() {
         return login;
     }
