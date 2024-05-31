@@ -1,10 +1,9 @@
 package controllers;
 
-import utils.ConnectionSQL;
-import views.menus.MenuFuncionario;
-import java.sql.*;
+import dao.FuncionarioDAO;
 
 public class AdministradorController extends FuncionarioController {
+    private FuncionarioDAO funcionarioDAO = new FuncionarioDAO();
 
     public static int processarOpcao(int opcao) {
         switch (opcao) {
@@ -17,7 +16,7 @@ public class AdministradorController extends FuncionarioController {
             //TO DO
                 break;
             case 4:
-            MenuFuncionario.processarOpcao(opcao);
+            FuncionarioController.processarOpcao(opcao);
 
             break;
             default:
@@ -28,36 +27,11 @@ public class AdministradorController extends FuncionarioController {
     }
 
     public boolean adicionarFuncionario(String nome, String login, String senha, String tipo) {
-        String sql = "INSERT INTO funcionarios (nome, login, senha, tipo) VALUES (?, ?, ?, ?)";
-        try (Connection conn = ConnectionSQL.getConnection();
-             PreparedStatement pstmt = conn.prepareStatement(sql)) {
-            pstmt.setString(1, nome);
-            pstmt.setString(2, login);
-            pstmt.setString(3, senha);
-            pstmt.setString(4, tipo);
-            pstmt.executeUpdate();
-            return true;
-        } catch (SQLException e) {
-            System.out.println(e.getMessage());
-            return false;
-        }
+        return funcionarioDAO.adicionarFuncionario(nome, login, senha, tipo);
     }
 
     public boolean atualizarFuncionario(int id, String nome, String login, String senha, String tipo) {
-        String sql = "UPDATE funcionarios SET nome = ?, login = ?, senha = ?, tipo = ? WHERE id = ?";
-        try (Connection conn = ConnectionSQL.getConnection();
-             PreparedStatement pstmt = conn.prepareStatement(sql)) {
-            pstmt.setString(1, nome);
-            pstmt.setString(2, login);
-            pstmt.setString(3, senha);
-            pstmt.setString(4, tipo);
-            pstmt.setInt(5, id);
-            pstmt.executeUpdate();
-            return true;
-        } catch (SQLException e) {
-            System.out.println(e.getMessage());
-            return false;
-        }
+        return funcionarioDAO.atualizarFuncionario(id, nome, login, senha, tipo);
     }
 
     // Adicione métodos para deletar e listar funcionários conforme necessário

@@ -5,6 +5,8 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+
+import dao.LivroDAO;
 import models.Credenciais;
 
 import utils.ClearConsole;
@@ -16,8 +18,7 @@ public class AlunoController {
         switch (opcao) {
             case 1:
                 ClearConsole.clear();
-                LivroController.listarLivros();
-
+                LivroDAO.listarLivros();
                 break;
 
             case 2:

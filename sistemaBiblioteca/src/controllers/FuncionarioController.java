@@ -10,7 +10,6 @@ public class FuncionarioController {
     public static int processarOpcao(int opcao) {
         switch (opcao) {
             case 4:
-
                 CadastrarLivro livros = new CadastrarLivro();
                 String[] dadosLivro = livros.cadastrarLivro();
                 LivroController novoLivro = new LivroController();
@@ -58,7 +57,7 @@ public class FuncionarioController {
                 CadastrarUsuario usuario = new CadastrarUsuario();
                 String[] dadosUsuario = usuario.cadastrarUsuario();
                 if (dadosUsuario[2].equals("aluno")) {
-                    AlunoController novoUsuario = new AlunoController();
+                    CadastrarUsuario novoUsuario = new CadastrarUsuario();
                     cadastrar = novoUsuario.cadastrarUsuario(dadosUsuario);
                 }
                // UsuarioController novoUsuario = new UsuarioController();
