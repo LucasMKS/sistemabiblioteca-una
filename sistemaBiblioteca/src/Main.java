@@ -72,6 +72,14 @@ public class Main {
             } else {
                 System.out.println("Login ou senha inválidos.");
             }
+<<<<<<< HEAD
+=======
+asdasdasaa
+            System.err.println("10.Sair");
+
+        } else {
+            System.out.println("Login ou senha inválidos.");
+>>>>>>> d0f5937ccdda028d80533940605b2c29a679f863
         }
     }
 }
