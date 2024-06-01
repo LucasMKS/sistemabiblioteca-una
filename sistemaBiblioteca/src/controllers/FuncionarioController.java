@@ -10,7 +10,6 @@ public class FuncionarioController {
     public int processarOpcao(int opcao) {
         switch (opcao) {
             case 4:
-
                 CadastrarLivro livros = new CadastrarLivro();
                 String[] dadosLivro = livros.cadastrarLivro();
                 LivroController novoLivro = new LivroController();
