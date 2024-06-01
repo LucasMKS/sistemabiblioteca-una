@@ -56,7 +56,7 @@ public class Main {
                         MenuFuncionario.mostrarOpcoes();
                         System.out.println("Digite sua opçao:");
                         int opcao1 = scanner.nextInt();
-                        FuncionarioController.processarOpcao(opcao1);
+                        new FuncionarioController().processarOpcao(opcao1);
                         break;
 
                     default:

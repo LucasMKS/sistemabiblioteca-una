@@ -7,7 +7,7 @@ import views.DevolverLivro;
 
 public class FuncionarioController {
 
-    public static int processarOpcao(int opcao) {
+    public int processarOpcao(int opcao) {
         switch (opcao) {
             case 4:
 
@@ -50,33 +50,8 @@ public class FuncionarioController {
             default:
                 System.out.println("Opção inválida");
 
-                // ----------------------------------------------------------------------
-                // CADASTRAR USÚARIO EM CONSTRUÇÃO --- INICIO
-                // ----------------------------------------------------------------------
-            case 9:
-
-                CadastrarUsuario usuario = new CadastrarUsuario();
-                String[] dadosUsuario = usuario.cadastrarUsuario();
-                if (dadosUsuario[2].equals("aluno")) {
-                    AlunoController novoUsuario = new AlunoController();
-                    cadastrar = novoUsuario.cadastrarUsuario(dadosUsuario);
-                }
-               // UsuarioController novoUsuario = new UsuarioController();
-                
-
-                if (cadastrar) {
-                    System.out.println("Usuário Cadastrado com sucesso!");
-                }
-
-                break;
+                return -1;
         }
-
-        // ----------------------------------------------------------------------
-        // CADASTRAR USÚARIO EM CONSTRUÇÃO --- FIM
-        // ----------------------------------------------------------------------
-
-        return -1;
     }
-
     // Adicionar mais funcionalidades conforme a necessidade do sistema
 }
