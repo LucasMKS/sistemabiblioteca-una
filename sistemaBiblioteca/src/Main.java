@@ -1,9 +1,7 @@
+
 import java.util.Scanner;
 
-import controllers.AdministradorController;
-import controllers.AlunoController;
 import controllers.AutenticacaoController;
-import controllers.FuncionarioController;
 import models.Credenciais;
 import views.menus.*;
 import utils.ClearConsole;
@@ -38,25 +36,23 @@ public class Main {
                 ClearConsole.clear();
                 System.out.println("Login realizado com sucesso! Bem vindo " + usuarioAutenticado.getNome());
 
-                String tipoUser = usuarioAutenticado.getTipo();
-                int opcao;
-                switch (tipoUser) {
+
+                new MenuPrincipal().menu(scanner, usuarioAutenticado);
+
+                /*switch (tipoUser) {
                     case "administrador":
-                        MenuAdministrador.mostrarOpcoes();
-                        System.out.println("Digite sua opçao:");
-                        opcao = scanner.nextInt();
-                        new AdministradorController().processarOpcao(opcao);
+                        menu(scanner);
                         break;
 
                     case "aluno":
-                        MenuAluno.mostrarOpcoes();
+                        new MenuAluno().mostrarOpcoes();
                         System.out.println("Digite sua opçao:");
                         opcao = scanner.nextInt();
                         AlunoController.processarOpcao(opcao, credenciaisValidas);
                         break;
 
                     case "funcionario":
-                        MenuFuncionario.mostrarOpcoes();
+                        new MenuFuncionario().mostrarOpcoes();
                         System.out.println("Digite sua opçao:");
                         opcao = scanner.nextInt();
                         new FuncionarioController().processarOpcao(opcao);
@@ -67,7 +63,7 @@ public class Main {
                         System.out.println("Voce nao tem permissao para utilizar o sistema!");
                         break;
 
-                }
+                } */
 
                 System.out.println("10.Sair");
                 break;
@@ -77,4 +73,36 @@ public class Main {
             }
         }
     }
+
+   /* public void menu(Scanner scanner, String tipoUser, Credenciais credenciaisValidas) {
+        switch (tipoUser) {
+            case "administrador":
+                new MenuAdministrador().mostrarOpcoes();
+                System.out.println("Digite sua opçao:");
+                int opcao = scanner.nextInt();
+                new AdministradorController().processarOpcao(opcao);
+                break;
+
+            case "aluno":
+                new MenuAluno().mostrarOpcoes();
+                System.out.println("Digite sua opçao:");
+                opcao = scanner.nextInt();
+                AlunoController.processarOpcao(opcao, credenciaisValidas);
+                break;
+
+            case "funcionario":
+                new MenuFuncionario().mostrarOpcoes();
+                System.out.println("Digite sua opçao:");
+                opcao = scanner.nextInt();
+                new FuncionarioController().processarOpcao(opcao);
+                break;
+
+            default:
+
+                System.out.println("Voce nao tem permissao para utilizar o sistema!");
+                break;
+
+        }
+
+    } */
 }

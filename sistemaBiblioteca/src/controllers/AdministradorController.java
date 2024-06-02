@@ -1,16 +1,21 @@
 package controllers;
 
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.util.Scanner;
+
 import dao.FuncionarioDAO;
+import models.Credenciais;
 import utils.ConnectionSQL;
 import views.CadastrarUsuario;
+import views.menus.MenuPrincipal;
 
 public class AdministradorController extends FuncionarioController {
     private FuncionarioDAO funcionarioDAO = new FuncionarioDAO();
 
-    public int processarOpcao(int opcao) {
+    public void processarOpcao(int opcao, Scanner scanner, Credenciais usuarioAutencado) {
         switch (opcao) {
             case 1:
                 break;
@@ -26,10 +31,7 @@ public class AdministradorController extends FuncionarioController {
             case 9:
                 boolean cadastrar = false;
                 String[] dadosUsuario = new CadastrarUsuario().cadastrarUsuario();
-                // login, senha, tipo, nome, RA
-                // if (dadosUsuario[2].equals("aluno")) {
                 cadastrar = insertUsuario(dadosUsuario);
-
                 if (cadastrar) {
                     System.out.println("Usuário Cadastrado com sucesso!");
                 }
@@ -37,7 +39,7 @@ public class AdministradorController extends FuncionarioController {
             default:
                 System.out.println("Opção inválida");
         }
-        return -1;
+        new MenuPrincipal().menu(scanner, usuarioAutencado);
     }
 
     public boolean adicionarFuncionario(String nome, String login, String senha, String tipo) {
@@ -83,3 +85,7 @@ public class AdministradorController extends FuncionarioController {
  * }
  */
 // UsuarioController novoUsuario = new UsuarioController();
+
+
+                // login, senha, tipo, nome, RA
+                // if (dadosUsuario[2].equals("aluno")) {

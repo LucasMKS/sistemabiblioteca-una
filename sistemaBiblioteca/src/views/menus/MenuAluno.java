@@ -4,7 +4,7 @@ import utils.ClearConsole;
 
 public class MenuAluno{
 
-    public static void mostrarOpcoes() {
+    public void mostrarOpcoes() {
         ClearConsole.clear();
         System.out.println("1. Consultar Livros");
         System.out.println("2. Verificar Cadastro");

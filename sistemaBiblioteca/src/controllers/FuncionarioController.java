@@ -1,13 +1,12 @@
 package controllers;
 
 import views.CadastrarLivro;
-import views.CadastrarUsuario;
 import views.EmprestarLivro;
 import views.DevolverLivro;
 
 public class FuncionarioController {
 
-    public int processarOpcao(int opcao) {
+    public void processarOpcao(int opcao) {
         switch (opcao) {
             case 4:
                 CadastrarLivro livros = new CadastrarLivro();
@@ -48,9 +47,8 @@ public class FuncionarioController {
                 break;
             default:
                 System.out.println("Opção inválida");
-                return -1;
+         
         }
-        return -1;
     }
     // Adicionar mais funcionalidades conforme a necessidade do sistema
 }
