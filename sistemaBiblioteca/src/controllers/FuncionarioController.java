@@ -48,9 +48,9 @@ public class FuncionarioController {
                 break;
             default:
                 System.out.println("Opção inválida");
-
                 return -1;
         }
+        return -1;
     }
     // Adicionar mais funcionalidades conforme a necessidade do sistema
 }

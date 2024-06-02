@@ -1,5 +1,6 @@
 import java.util.Scanner;
 
+import controllers.AdministradorController;
 import controllers.AlunoController;
 import controllers.AutenticacaoController;
 import controllers.FuncionarioController;
@@ -8,11 +9,11 @@ import views.menus.*;
 import utils.ClearConsole;
 
 public class Main {
-    private static final Scanner scanner = new Scanner(System.in);
 
     public static void main(String[] args) {
+        final Scanner scanner = new Scanner(System.in);
         try {
-            realizarLogin();
+            new Main().realizarLogin(scanner);
         } catch (Exception e) {
             System.out.println("Erro no sistema: " + e.getMessage());
         } finally {
@@ -20,7 +21,7 @@ public class Main {
         }
     }
 
-    private static void realizarLogin() {
+    private void realizarLogin(Scanner scanner) {
 
         while (true) {
             System.out.println("Digite seu login:");
@@ -38,25 +39,27 @@ public class Main {
                 System.out.println("Login realizado com sucesso! Bem vindo " + usuarioAutenticado.getNome());
 
                 String tipoUser = usuarioAutenticado.getTipo();
-
+                int opcao;
                 switch (tipoUser) {
-
                     case "administrador":
                         MenuAdministrador.mostrarOpcoes();
+                        System.out.println("Digite sua opçao:");
+                        opcao = scanner.nextInt();
+                        new AdministradorController().processarOpcao(opcao);
                         break;
 
                     case "aluno":
                         MenuAluno.mostrarOpcoes();
                         System.out.println("Digite sua opçao:");
-                        int opcao = scanner.nextInt();
+                        opcao = scanner.nextInt();
                         AlunoController.processarOpcao(opcao, credenciaisValidas);
                         break;
 
                     case "funcionario":
                         MenuFuncionario.mostrarOpcoes();
                         System.out.println("Digite sua opçao:");
-                        int opcao1 = scanner.nextInt();
-                        new FuncionarioController().processarOpcao(opcao1);
+                        opcao = scanner.nextInt();
+                        new FuncionarioController().processarOpcao(opcao);
                         break;
 
                     default:
