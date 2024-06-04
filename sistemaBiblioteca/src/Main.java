@@ -43,21 +43,18 @@ public class Main {
 
                     case "administrador":
                         MenuAdministrador.mostrarOpcoes();
-                        break;
 
                     case "aluno":
                         MenuAluno.mostrarOpcoes();
                         System.out.println("Digite sua opçao:");
                         int opcao = scanner.nextInt();
                         AlunoController.processarOpcao(opcao, credenciaisValidas);
-                        break;
 
                     case "funcionario":
                         MenuFuncionario.mostrarOpcoes();
                         System.out.println("Digite sua opçao:");
                         int opcao1 = scanner.nextInt();
                         FuncionarioController.processarOpcao(opcao1);
-                        break;
 
                     default:
 
