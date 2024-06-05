@@ -9,36 +9,50 @@ import models.Credenciais;
 
 public class MenuPrincipal {
         public void menu(Scanner scanner, Credenciais usuarioAutencado) {
+
             int opcao;
-        switch (usuarioAutencado.getTipo()) {
-            case "administrador":
-                new MenuAdministrador().mostrarOpcoes();
-                System.out.println("Digite sua opçao:");
+            Boolean contMenu = true;
+            while (contMenu == true) {
+                switch (usuarioAutencado.getTipo()) {
+                    case "administrador":
+                        new MenuAdministrador().mostrarOpcoes();
+                        System.out.println("Digite sua opçao:");
+                        opcao = scanner.nextInt();
+                        limparScanner(scanner);  
+                        new AdministradorController().processarOpcao(opcao, scanner, usuarioAutencado);  
+                        break;  
+                    case "aluno":
+                        new MenuAluno().mostrarOpcoes();
+                        System.out.println("Digite sua opçao:");
+                        opcao = scanner.nextInt();
+                        limparScanner(scanner);
+                        AlunoController.processarOpcao(opcao, usuarioAutencado);
+                        break;
+                    case "funcionario":
+                        new MenuFuncionario().mostrarOpcoes();
+                        System.out.println("Digite sua opçao:");
+                        opcao = scanner.nextInt();
+                        limparScanner(scanner);
+                        new FuncionarioController().processarOpcao(opcao);
+                        break;
+                    default:
+                        System.out.println("Voce nao tem permissao para utilizar o sistema!");
+                        break;
+                }     
+                System.out.println("Deseja continuar no menu? (1 - Sim / 0 - Não)");
                 opcao = scanner.nextInt();
-                new AdministradorController().processarOpcao(opcao, scanner, usuarioAutencado);
-                break;
-
-            case "aluno":
-                new MenuAluno().mostrarOpcoes();
-                System.out.println("Digite sua opçao:");
-                opcao = scanner.nextInt();
-                AlunoController.processarOpcao(opcao, usuarioAutencado);
-                break;
-
-            case "funcionario":
-                new MenuFuncionario().mostrarOpcoes();
-                System.out.println("Digite sua opçao:");
-                opcao = scanner.nextInt();
-                new FuncionarioController().processarOpcao(opcao);
-                break;
-
-            default:
-
-                System.out.println("Voce nao tem permissao para utilizar o sistema!");
-                break;
-
-        }
-
+                limparScanner(scanner); 
+                if (opcao == 0) {
+                    contMenu = false;
+                }      
+            }
     }
     
+
+
+    private void limparScanner(Scanner scanner) {
+        if (scanner.hasNextLine()) {
+            scanner.nextLine();
+        }
+    }
 }

@@ -21,7 +21,6 @@ public class Main {
 
     private void realizarLogin(Scanner scanner) {
 
-        while (true) {
             System.out.println("Digite seu login:");
             String login = scanner.nextLine();
             System.out.println("Digite sua senha:");
@@ -39,38 +38,10 @@ public class Main {
 
                 new MenuPrincipal().menu(scanner, usuarioAutenticado);
 
-                /*switch (tipoUser) {
-                    case "administrador":
-                        menu(scanner);
-                        break;
-
-                    case "aluno":
-                        new MenuAluno().mostrarOpcoes();
-                        System.out.println("Digite sua opçao:");
-                        opcao = scanner.nextInt();
-                        AlunoController.processarOpcao(opcao, credenciaisValidas);
-
-                    case "funcionario":
-                        new MenuFuncionario().mostrarOpcoes();
-                        System.out.println("Digite sua opçao:");
-                        opcao = scanner.nextInt();
-                        new FuncionarioController().processarOpcao(opcao);
-                        break;
-
-                    default:
-
-                        System.out.println("Voce nao tem permissao para utilizar o sistema!");
-                        break;
-
-                } */
-
-                System.out.println("10.Sair");
-                break;
-
             } else {
                 System.out.println("Login ou senha inválidos.");
             }
-        }
+        
     }
 
    /* public void menu(Scanner scanner, String tipoUser, Credenciais credenciaisValidas) {
