@@ -13,22 +13,24 @@ import utils.ConnectionSQL;
 
 public class AlunoController {
 
-   public static int processarOpcao(int opcao, Credenciais credenciaisValidas) {
+    public void processarOpcao(int opcao, Credenciais credenciaisValidas) {
         switch (opcao) {
             case 1:
                 ClearConsole.clear();
                 LivroDAO.listarLivros();
                 break;
-
             case 2:
                 ClearConsole.clear();
                 verificarCadastro(credenciaisValidas);
                 break;
+            case 3:
+                ClearConsole.clear();
+                // Implementar a lógica para "Status Emprestimo"
+                System.out.println("Status do Empréstimo...");
+                break;
             default:
                 System.out.println("Opção inválida");
         }
-
-        return -1;
     }
 
 

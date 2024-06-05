@@ -1,13 +1,24 @@
 package controllers;
 
+import models.Credenciais;
 import views.CadastrarLivro;
 import views.EmprestarLivro;
 import views.DevolverLivro;
 
 public class FuncionarioController {
 
-    public void processarOpcao(int opcao) {
+    public void processarOpcao(int opcao, Credenciais credenciaisValidas) {
+        AlunoController alunoController = new AlunoController();
         switch (opcao) {
+            case 1:
+                alunoController.processarOpcao(opcao, credenciaisValidas);
+                break;
+            case 2:
+                alunoController.processarOpcao(opcao, credenciaisValidas);
+                break;
+            case 3:
+                alunoController.processarOpcao(opcao, credenciaisValidas);
+                break;
             case 4:
                 CadastrarLivro livros = new CadastrarLivro();
                 String[] dadosLivro = livros.cadastrarLivro();

@@ -26,7 +26,7 @@ public class AdministradorController extends FuncionarioController {
                 // TO DO
                 break;
             case 4:
-                new FuncionarioController().processarOpcao(opcao);
+                new FuncionarioController().processarOpcao(opcao, usuarioAutencado);
                 break;
             case 9:
                 boolean cadastrar = false;

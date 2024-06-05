@@ -8,33 +8,33 @@ import controllers.FuncionarioController;
 import models.Credenciais;
 
 public class MenuPrincipal {
-        public void menu(Scanner scanner, Credenciais usuarioAutencado) {
+        public void menu(Scanner scanner, Credenciais usuarioAutenticado) {
 
             int opcao;
             Boolean contMenu = true;
             while (contMenu == true) {
-                switch (usuarioAutencado.getTipo()) {
-                    case "administrador":
-                        new MenuAdministrador().mostrarOpcoes();
-                        System.out.println("Digite sua opçao:");
-                        opcao = scanner.nextInt();
-                        limparScanner(scanner);  
-                        new AdministradorController().processarOpcao(opcao, scanner, usuarioAutencado);  
-                        break;  
+                switch (usuarioAutenticado.getTipo()) {
                     case "aluno":
                         new MenuAluno().mostrarOpcoes();
                         System.out.println("Digite sua opçao:");
                         opcao = scanner.nextInt();
                         limparScanner(scanner);
-                        AlunoController.processarOpcao(opcao, usuarioAutencado);
+                        new AlunoController().processarOpcao(opcao, usuarioAutenticado);
                         break;
                     case "funcionario":
                         new MenuFuncionario().mostrarOpcoes();
                         System.out.println("Digite sua opçao:");
                         opcao = scanner.nextInt();
                         limparScanner(scanner);
-                        new FuncionarioController().processarOpcao(opcao);
+                        new FuncionarioController().processarOpcao(opcao, usuarioAutenticado);
                         break;
+                    case "administrador":
+                        new MenuAdministrador().mostrarOpcoes();
+                        System.out.println("Digite sua opçao:");
+                        opcao = scanner.nextInt();
+                        limparScanner(scanner);
+                        new AdministradorController().processarOpcao(opcao, scanner, usuarioAutenticado);  
+                        break;  
                     default:
                         System.out.println("Voce nao tem permissao para utilizar o sistema!");
                         break;
