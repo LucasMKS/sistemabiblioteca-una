@@ -39,7 +39,7 @@ public class MenuPrincipal {
                         System.out.println("Voce nao tem permissao para utilizar o sistema!");
                         break;
                 }     
-                System.out.println("Deseja continuar no menu? (1 - Sim / 0 - Não)");
+                System.out.println("\n\nDeseja continuar no menu? (1 - Sim / 0 - Não)");
                 opcao = scanner.nextInt();
                 limparScanner(scanner); 
                 if (opcao == 0) {

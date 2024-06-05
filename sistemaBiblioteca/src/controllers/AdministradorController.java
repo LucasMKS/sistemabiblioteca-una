@@ -3,6 +3,7 @@ package controllers;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Scanner;
 
@@ -15,18 +16,33 @@ import views.menus.MenuPrincipal;
 public class AdministradorController extends FuncionarioController {
     private FuncionarioDAO funcionarioDAO = new FuncionarioDAO();
 
-    public void processarOpcao(int opcao, Scanner scanner, Credenciais usuarioAutencado) {
+    public void processarOpcao(int opcao, Scanner scanner, Credenciais credenciaisValidas) {
+        AlunoController alunoController = new AlunoController();
+        FuncionarioController funcionarioController = new FuncionarioController();
         switch (opcao) {
             case 1:
+                alunoController.processarOpcao(opcao, credenciaisValidas);
                 break;
             case 2:
-                // TO DO
+                alunoController.processarOpcao(opcao, credenciaisValidas);
                 break;
             case 3:
-                // TO DO
+                alunoController.processarOpcao(opcao, credenciaisValidas);
                 break;
             case 4:
-                new FuncionarioController().processarOpcao(opcao, usuarioAutencado);
+                funcionarioController.processarOpcao(opcao, credenciaisValidas);
+                break;
+            case 5:
+                funcionarioController.processarOpcao(opcao, credenciaisValidas);
+                break;
+            case 6:
+                funcionarioController.processarOpcao(opcao, credenciaisValidas);
+                break;
+            case 7:
+                System.out.println("Alterar Prazo devolução em desenvolvimento");
+                break;
+            case 8:
+                System.out.println("Alterar permissões de usuarios em desenvolvimento");
                 break;
             case 9:
                 boolean cadastrar = false;
@@ -39,7 +55,6 @@ public class AdministradorController extends FuncionarioController {
             default:
                 System.out.println("Opção inválida");
         }
-        new MenuPrincipal().menu(scanner, usuarioAutencado);
     }
 
     public boolean adicionarFuncionario(String nome, String login, String senha, String tipo) {
@@ -47,20 +62,33 @@ public class AdministradorController extends FuncionarioController {
     }
 
     public boolean insertUsuario(String[] usuarioDadoStrings) {
-        String sql = "INSERT INTO usuarios (login, senha, tipo, nome, RA) VALUES (?, ?, ?, ?, ?)";
+        String checkLoginSql = "SELECT COUNT(*) FROM usuarios WHERE login = ?";
+        String insertSql = "INSERT INTO usuarios (login, senha, tipo, nome, ra) VALUES (?, ?, ?, ?, ?)";
+
         try (Connection conn = ConnectionSQL.getConnection();
-                PreparedStatement pstmt = conn.prepareStatement(sql)) {
-            // login, senha, tipo, nome, RA
-            pstmt.setString(1, usuarioDadoStrings[0]);
-            pstmt.setString(2, usuarioDadoStrings[1]);
-            pstmt.setString(3, usuarioDadoStrings[2]);
-            pstmt.setString(4, usuarioDadoStrings[3]);
-            if (usuarioDadoStrings[2].equals("aluno")) {
-                pstmt.setString(5, usuarioDadoStrings[4]);
-            } else {
-                pstmt.setString(5, null);
+            PreparedStatement checkLoginStmt = conn.prepareStatement(checkLoginSql);
+            PreparedStatement insertStmt = conn.prepareStatement(insertSql)) {
+
+            // Verificar se o login já existe
+            checkLoginStmt.setString(1, usuarioDadoStrings[0]);
+            ResultSet rs = checkLoginStmt.executeQuery();
+            if (rs.next() && rs.getInt(1) > 0) {
+                System.out.println("\nErro: Login já existente... Voltando ao menu principal.");
+                pause(5);
+                return false;
             }
-            pstmt.executeUpdate();
+
+            // Inserir novo usuário
+            insertStmt.setString(1, usuarioDadoStrings[0]);
+            insertStmt.setString(2, usuarioDadoStrings[1]);
+            insertStmt.setString(3, usuarioDadoStrings[2]);
+            insertStmt.setString(4, usuarioDadoStrings[3]);
+            if (usuarioDadoStrings[2].equals("aluno")) {
+                insertStmt.setString(5, usuarioDadoStrings[4]);
+            } else {
+                insertStmt.setString(5, null);
+            }
+            insertStmt.executeUpdate();
             return true;
         } catch (SQLException e) {
             System.out.println(e.getMessage());
@@ -70,6 +98,14 @@ public class AdministradorController extends FuncionarioController {
 
     public boolean atualizarFuncionario(int id, String nome, String login, String senha, String tipo) {
         return funcionarioDAO.atualizarFuncionario(id, nome, login, senha, tipo);
+    }
+
+    private void pause(int seconds) {
+        try {
+            Thread.sleep(seconds * 1000);
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+        }
     }
 }
 
