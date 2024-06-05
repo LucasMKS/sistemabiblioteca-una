@@ -13,37 +13,21 @@ public class FuncionarioController {
                 String[] dadosLivro = livros.cadastrarLivro();
                 LivroController novoLivro = new LivroController();
                 boolean cadastrar = novoLivro.cadastrarLivro(dadosLivro);
-
                 if (cadastrar) {
                     System.out.println("Livro Cadastrado com sucesso!");
                 }
-
                 break;
-
             case 5:
-
                 EmprestarLivro emprestimos = new EmprestarLivro();
                 String[] dadosEmprestimo = emprestimos.emprestarLivro();
                 LivroController novoEmprestimo = new LivroController();
-                boolean emprestar = novoEmprestimo.emprestarLivro(dadosEmprestimo);
-
-                if (emprestar) {
-                    System.out.println("Emprestimo realizado com sucesso!");
-                }
-
+                novoEmprestimo.emprestarLivro(dadosEmprestimo);
                 break;
-
             case 6:
-
                 DevolverLivro devolucoes = new DevolverLivro();
                 String[] dadosDevolucao = devolucoes.devolverLivro();
                 LivroController novaDevolucao = new LivroController();
-                boolean devolucao = novaDevolucao.devolverLivro(dadosDevolucao);
-
-                if (devolucao) {
-                    System.out.println("Emprestimo realizado com sucesso!");
-                }
-
+                novaDevolucao.devolverLivro(dadosDevolucao);
                 break;
             default:
                 System.out.println("Opção inválida");

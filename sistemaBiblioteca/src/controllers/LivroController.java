@@ -1,15 +1,5 @@
 package controllers;
 
-import models.Livro;
-import utils.ConnectionSQL;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-
 import dao.LivroDAO;
 
 public class LivroController {
