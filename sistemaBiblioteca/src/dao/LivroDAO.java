@@ -53,7 +53,6 @@ public class LivroDAO {
     public boolean emprestarLivro(String[] dados) {
         // Obter a data e hora atual
         LocalDateTime now = LocalDateTime.now();
-        // Formatar datas para strings
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
         String dataEmprestimoStr = now.format(formatter);
 
@@ -67,7 +66,7 @@ public class LivroDAO {
         String checkEmprestimoAlunoSql = "SELECT COUNT(*) AS emprestados FROM emprestimos WHERE aluno_id = ? AND isbn = ? AND status = true";
         String checkEmprestimoExistenteSql = "SELECT * FROM emprestimos WHERE aluno_id = ? AND isbn = ?";
         String atualizarEmprestimoSql = "UPDATE emprestimos SET status = true, data_emprestimo = ?, data_devolucao = ? WHERE aluno_id = ? AND isbn = ?";
-        String inserirEmprestimoSql = "INSERT INTO emprestimos (aluno_id, isbn, data_emprestimo, data_devolucao, status) VALUES (?, ?, ?, ?, ?)";
+        String inserirEmprestimoSql = "INSERT INTO emprestimos (aluno_id, isbn, data_emprestimo, data_devolucao, status) VALUES (?, ?, ?, ?, true)";
 
         try (PreparedStatement getAlunoIdStmt = conn.prepareStatement(getAlunoIdSql);
              PreparedStatement checkQuantidadeStmt = conn.prepareStatement(checkQuantidadeSql);
@@ -77,7 +76,7 @@ public class LivroDAO {
              PreparedStatement atualizarEmprestimoStmt = conn.prepareStatement(atualizarEmprestimoSql);
              PreparedStatement insertStmt = conn.prepareStatement(inserirEmprestimoSql)) {
 
-                            // Obter o ID do aluno a partir do RA
+            // Obter o ID do aluno a partir do RA
             int alunoId = getAlunoIdFromRa(getAlunoIdStmt, dados[0]);
             if (alunoId == -1) {
                 System.out.println("Erro: Aluno não encontrado.");
@@ -85,6 +84,12 @@ public class LivroDAO {
             }
             dados[0] = String.valueOf(alunoId); // Atualiza o array de dados com o ID do aluno
 
+            // Verificar a quantidade disponível
+            int quantidadeDisponivel = verificarQuantidadeDisponivel(checkQuantidadeStmt, checkEmprestadosStmt, dados[1]);
+            if (quantidadeDisponivel <= 0) {
+                System.out.println("Erro ao registrar empréstimo: Nenhum exemplar disponível.");
+                return false;
+            }
 
             // Verificar se o aluno já possui um exemplar com o mesmo ISBN emprestado
             if (alunoPossuiEmprestimoAtivo(checkEmprestimoAlunoStmt, dados)) {
@@ -92,11 +97,36 @@ public class LivroDAO {
                 return false;
             }
 
-            // Verificar a quantidade disponível e realizar o empréstimo
-            if (!verificarQuantidadeERealizerEmprestimo(checkQuantidadeStmt, checkEmprestadosStmt, dados, insertStmt, dataEmprestimoStr, dataDevolucaoStr, checkEmprestimoExistenteStmt, atualizarEmprestimoStmt)) {
-                System.out.println("Erro ao registrar empréstimo: Nenhum exemplar disponível.");
-                return false;
+            // Verificar se já existe um empréstimo para este aluno e livro
+            checkEmprestimoExistenteStmt.setInt(1, Integer.parseInt(dados[0]));
+            checkEmprestimoExistenteStmt.setInt(2, Integer.parseInt(dados[1]));
+            ResultSet emprestimoExistenteResult = checkEmprestimoExistenteStmt.executeQuery();
+            if (emprestimoExistenteResult.next()) {
+                // Atualizar o empréstimo existente
+                atualizarEmprestimoStmt.setString(1, dataEmprestimoStr);
+                atualizarEmprestimoStmt.setString(2, dataDevolucaoStr);
+                atualizarEmprestimoStmt.setInt(3, Integer.parseInt(dados[0]));
+                atualizarEmprestimoStmt.setInt(4, Integer.parseInt(dados[1]));
+                atualizarEmprestimoStmt.executeUpdate();
+            } else {
+                // Inserir um novo empréstimo
+                insertStmt.setInt(1, Integer.parseInt(dados[0]));
+                insertStmt.setInt(2, Integer.parseInt(dados[1]));
+                insertStmt.setString(3, dataEmprestimoStr);
+                insertStmt.setString(4, dataDevolucaoStr);
+                insertStmt.executeUpdate();
             }
+
+            String nomeLivro = obterNomeLivro(dados[1]);
+            String nomeUsuario = obterNomeUsuario(dados[0]);
+
+            // Exibir mensagem de sucesso com detalhes
+            System.out.println("--------------------------------------------------");
+            System.out.println("Empréstimo realizado com sucesso!");
+            System.out.println("Livro: " + nomeLivro);
+            System.out.println("Usuário: " + nomeUsuario);
+            System.out.println("Data de Devolução: " + dataDevolucaoStr);
+            System.out.println("--------------------------------------------------");
 
             return true;
 
@@ -116,62 +146,23 @@ public class LivroDAO {
         }
         return false;
     }
+    
 
-    private boolean verificarQuantidadeERealizerEmprestimo(
-        PreparedStatement checkQuantidadeStmt, PreparedStatement checkEmprestadosStmt,
-        String[] dados, PreparedStatement insertStmt, String dataEmprestimoStr, String dataDevolucaoStr, PreparedStatement checkEmprestimoExistenteStmt, PreparedStatement atualizarEmprestimoStmt
-    ) throws SQLException {
-        checkQuantidadeStmt.setInt(1, Integer.parseInt(dados[1]));
+    private int verificarQuantidadeDisponivel(PreparedStatement checkQuantidadeStmt, PreparedStatement checkEmprestadosStmt, String isbn) throws SQLException {
+        checkQuantidadeStmt.setInt(1, Integer.parseInt(isbn));
         ResultSet quantidadeResult = checkQuantidadeStmt.executeQuery();
         if (quantidadeResult.next()) {
             int quantidadeTotal = quantidadeResult.getInt("quantidade");
 
-            // Verificar quantos exemplares estão emprestados
-            checkEmprestadosStmt.setInt(1, Integer.parseInt(dados[1]));
+            checkEmprestadosStmt.setInt(1, Integer.parseInt(isbn));
             ResultSet emprestadosResult = checkEmprestadosStmt.executeQuery();
             if (emprestadosResult.next()) {
                 int exemplaresEmprestados = emprestadosResult.getInt("emprestados");
 
-                // Calcular quantidade disponível
-                int disponiveis = quantidadeTotal - exemplaresEmprestados;
-                if (disponiveis > 0) {
-                    // Verificar se já existe um empréstimo para este aluno e livro
-                    checkEmprestimoExistenteStmt.setInt(1, Integer.parseInt(dados[0]));
-                    checkEmprestimoExistenteStmt.setInt(2, Integer.parseInt(dados[1]));
-                    ResultSet emprestimoExistenteResult = checkEmprestimoExistenteStmt.executeQuery();
-                    if (emprestimoExistenteResult.next()) {
-                        // Atualizar o empréstimo existente
-                        atualizarEmprestimoStmt.setString(1, dataEmprestimoStr);
-                        atualizarEmprestimoStmt.setString(2, dataDevolucaoStr);
-                        atualizarEmprestimoStmt.setInt(3, Integer.parseInt(dados[0]));
-                        atualizarEmprestimoStmt.setInt(4, Integer.parseInt(dados[1]));
-                        atualizarEmprestimoStmt.executeUpdate();
-                    } else {
-                        // Inserir um novo empréstimo
-                        insertStmt.setInt(1, Integer.parseInt(dados[0]));
-                        insertStmt.setInt(2, Integer.parseInt(dados[1]));
-                        insertStmt.setString(3, dataEmprestimoStr);
-                        insertStmt.setString(4, dataDevolucaoStr);
-                        insertStmt.setBoolean(5, true); // Status ativo
-                        insertStmt.executeUpdate();
-                    }
-
-                    String nomeLivro = obterNomeLivro();
-                    String nomeUsuario = obterNomeUsuario();
-
-                    // Exibir mensagem de sucesso com detalhes
-                    System.out.println("--------------------------------------------------");
-                    System.out.println("Empréstimo realizado com sucesso!");
-                    System.out.println("Livro: " + nomeLivro);
-                    System.out.println("Usuário: " + nomeUsuario);
-                    System.out.println("Data de Devolução: " + dataDevolucaoStr);
-                    System.out.println("--------------------------------------------------");
-
-                    return true;
-                }
+                return quantidadeTotal - exemplaresEmprestados;
             }
         }
-        return false;
+        return 0;
     }
 
     public boolean devolverLivro(String[] dados) {
@@ -195,8 +186,8 @@ public class LivroDAO {
             int rowsUpdated = pstmt.executeUpdate();
     
             if (rowsUpdated > 0) {
-                String nomeLivro = obterNomeLivro();
-                String nomeUsuario = obterNomeUsuario();
+                String nomeLivro = obterNomeLivro(dados[1]);
+                String nomeUsuario = obterNomeUsuario(dados[0]);
     
                 // Exibir mensagem de sucesso com detalhes
                 System.out.println("\nDevolução realizada com sucesso!");
@@ -215,7 +206,6 @@ public class LivroDAO {
             return false;
         }
     }
-    
 
     public static void listarLivros() {
         String sql = "SELECT id_livro, titulo, autor, isbn, categoria, quantidade FROM livros";
@@ -247,34 +237,28 @@ public class LivroDAO {
         }
     }
 
-    public String obterNomeUsuario() {
-        String sql = "SELECT nome FROM usuarios WHERE id_usuarios = ?";
-
-        try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
-            pstmt.setInt(1, 1);
-            ResultSet rs = pstmt.executeQuery();
-            if (rs.next()) {
-                return rs.getString("nome");
-            }
-        } catch (SQLException e) {
-            System.out.println("Erro ao obter nome do usuário: " + e.getMessage());
-        }
-        return "";
-    }
-
-    public String obterNomeLivro() {
+    private String obterNomeLivro(String isbn) throws SQLException {
         String sql = "SELECT titulo FROM livros WHERE isbn = ?";
-
-        try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
-            pstmt.setInt(1, 1);
-            ResultSet rs = pstmt.executeQuery();
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setInt(1, Integer.parseInt(isbn));
+            ResultSet rs = stmt.executeQuery();
             if (rs.next()) {
                 return rs.getString("titulo");
             }
-        } catch (SQLException e) {
-            System.out.println("Erro ao obter nome do livro: " + e.getMessage());
         }
-        return "";
+        return "Desconhecido";
+    }
+
+    private String obterNomeUsuario(String idUsuario) throws SQLException {
+        String sql = "SELECT nome FROM usuarios WHERE id_usuarios = ?";
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setInt(1, Integer.parseInt(idUsuario));
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                return rs.getString("nome");
+            }
+        }
+        return "Desconhecido";
     }
 
     private int getAlunoIdFromRa(PreparedStatement stmt, String ra) throws SQLException {
