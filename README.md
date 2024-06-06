@@ -71,3 +71,4 @@ mvn exec:java -Dexec.mainClass="com.edaa.sistemabiblioteca.Main"
 
 - Gabriel Galdino
 - Lucas Marques da Silva
+- César Martins
