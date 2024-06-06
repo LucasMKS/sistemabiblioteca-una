@@ -55,3 +55,19 @@ O projeto é dividido nas seguintes camadas:
 Para executar o projeto, execute o seguinte comando no diretório raiz do projeto:
 ```bash
 mvn exec:java -Dexec.mainClass="com.edaa.sistemabiblioteca.Main"
+```
+## Integrantes: 
+
+**Professora Rafaela:**
+
+- Alan Junio Vila Nova Pereira
+- Hugo Henrique Rodrigues de Almeida
+- João Victor
+- Tiago de Britto Antunes
+- Wallace Neres Pereira de Souza
+
+
+**Professor Daniel:**
+
+- Gabriel Galdino
+- Lucas Marques da Silva
