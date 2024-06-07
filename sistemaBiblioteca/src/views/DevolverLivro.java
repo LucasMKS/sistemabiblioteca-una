@@ -10,7 +10,7 @@ public class DevolverLivro {
         String[] dados = new String[2]; 
 
         this.scanner = new Scanner(System.in);
-        System.out.println("Informe o ID do aluno:");
+        System.out.println("Informe o RA do usuário:");
         dados[0] = scanner.nextLine();
         System.out.println("Informe o ISBN do livro:");
         dados[1] = scanner.nextLine();

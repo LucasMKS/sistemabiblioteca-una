@@ -170,14 +170,23 @@ public class LivroDAO {
         LocalDateTime now = LocalDateTime.now();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
         String dataDevolucaoStr = now.format(formatter);
-    
+        
+        String getAlunoIdSql = "SELECT id_usuarios FROM usuarios WHERE ra = ?";
         String sql = "UPDATE emprestimos SET data_devolucao = ?, status = false WHERE aluno_id = ? AND isbn = ? AND status = true";
         String obterNomeLivroSql = "SELECT titulo FROM livros WHERE isbn = ?";
         String obterNomeUsuarioSql = "SELECT nome FROM usuarios WHERE id_usuarios = ?";
     
-        try (PreparedStatement pstmt = conn.prepareStatement(sql);
+        try (PreparedStatement getAlunoIdStmt = conn.prepareStatement(getAlunoIdSql);
+             PreparedStatement pstmt = conn.prepareStatement(sql);
              PreparedStatement obterNomeLivroStmt = conn.prepareStatement(obterNomeLivroSql);
              PreparedStatement obterNomeUsuarioStmt = conn.prepareStatement(obterNomeUsuarioSql)) {
+
+            int alunoId = getAlunoIdFromRa(getAlunoIdStmt, dados[0]);
+            if (alunoId == -1) {
+                System.out.println("Erro: Aluno não encontrado.");
+                return false;
+            }
+            dados[0] = String.valueOf(alunoId);
     
             // Atualizar a data de devolução e o status do empréstimo
             pstmt.setString(1, dataDevolucaoStr);
