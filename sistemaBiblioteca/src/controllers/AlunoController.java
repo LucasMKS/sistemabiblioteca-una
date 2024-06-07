@@ -4,6 +4,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.List;
+import java.util.Scanner;
 
 import dao.LivroDAO;
 import models.Credenciais;
@@ -25,8 +27,19 @@ public class AlunoController {
                 break;
             case 3:
                 ClearConsole.clear();
-                // Implementar a lógica para "Status Emprestimo"
-                System.out.println("Status do Empréstimo...");
+                LivroDAO statusEmprestimo = new LivroDAO();
+                Scanner scanner = new Scanner(System.in);
+                String ra = scanner.nextLine();
+                List<String> livrosEmprestados = statusEmprestimo.verificarStatusEmprestimo(ra);
+
+                if (livrosEmprestados.isEmpty()) {
+                    System.out.println("Nenhum livro emprestado para o aluno com RA: " + ra);
+                } else {
+                    System.out.println("Livros emprestados para o aluno com RA: " + ra);
+                    for (String livro : livrosEmprestados) {
+                        System.out.println(livro);
+                    }
+                }
                 break;
             default:
                 System.out.println("Opção inválida");

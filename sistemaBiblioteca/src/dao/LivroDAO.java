@@ -4,8 +4,11 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.List;
 
 import models.Livro;
 import utils.ConnectionSQL;
@@ -278,6 +281,88 @@ public class LivroDAO {
         }
         return -1; // Retornar -1 se o aluno não for encontrado
     }
+
+    public List<String> verificarStatusEmprestimo(String ra) {
+        String getAlunoIdSql = "SELECT id_usuarios FROM usuarios WHERE ra = ?";
+        String query = "SELECT livros.titulo, emprestimos.data_emprestimo, emprestimos.data_devolucao " +
+                       "FROM emprestimos " +
+                       "JOIN livros ON emprestimos.isbn = livros.isbn " +
+                       "WHERE emprestimos.aluno_id = ? AND emprestimos.status = true";
+
+        List<String> livrosEmprestados = new ArrayList<>();
+
+        try (Connection conn = ConnectionSQL.getConnection();
+             PreparedStatement getAlunoIdStmt = conn.prepareStatement(getAlunoIdSql);
+             PreparedStatement stmt = conn.prepareStatement(query)) {
+
+            // Obtém o aluno_id a partir do RA
+            int alunoId = getAlunoIdFromRa(getAlunoIdStmt, ra);
+            if (alunoId == -1) {
+                System.out.println("Erro: Aluno não encontrado.");
+                return livrosEmprestados;
+            }
+
+            // Define o parâmetro para a consulta de empréstimos
+            stmt.setInt(1, alunoId);
+            ResultSet rs = stmt.executeQuery();
+
+            // Processa os resultados da consulta
+            while (rs.next()) {
+                String titulo = rs.getString("titulo");
+                String dataEmprestimo = rs.getString("data_emprestimo");
+                String dataDevolucao = rs.getString("data_devolucao");
+                livrosEmprestados.add(String.format("Título: %s, Data de Empréstimo: %s, Data de Devolução: %s", titulo, dataEmprestimo, dataDevolucao));
+            }
+        } catch (SQLException e) {
+            System.out.println("Erro ao verificar status de empréstimo: " + e.getMessage());
+        }
+
+        return livrosEmprestados;
+    }
+
+    public boolean alterarPrazoDevolucao(String[] dados) {
+        String query = "UPDATE emprestimos SET data_devolucao = ? WHERE id = ?";
+        String getDataDevolucaoQuery = "SELECT data_devolucao FROM emprestimos WHERE id = ?";
+    
+        try (Connection conn = ConnectionSQL.getConnection();
+             PreparedStatement getDataStmt = conn.prepareStatement(getDataDevolucaoQuery);
+             PreparedStatement updateStmt = conn.prepareStatement(query)) {
+    
+            // Obter a data de devolução atual
+            getDataStmt.setInt(1, Integer.parseInt(dados[0]));
+            ResultSet rs = getDataStmt.executeQuery();
+    
+            if (rs.next()) {
+                LocalDate dataDevolucaoAtual = rs.getDate("data_devolucao").toLocalDate();
+                System.out.println("Data de devolução atual: " + dataDevolucaoAtual);
+    
+                // Calcular a nova data de devolução
+                LocalDate novaDataDevolucao = dataDevolucaoAtual.plusDays(Integer.parseInt(dados[1]));
+    
+                // Atualizar a data de devolução
+                updateStmt.setString(1, novaDataDevolucao.toString());
+                updateStmt.setInt(2, Integer.parseInt(dados[0]));
+    
+                int rowsUpdated = updateStmt.executeUpdate();
+                if (rowsUpdated > 0) {
+                    System.out.println("Prazo de devolução atualizado com sucesso para: " + novaDataDevolucao);
+                    return true;
+                } else {
+                    System.out.println("Erro: Empréstimo não encontrado.");
+                    return false;
+                }
+            } else {
+                System.out.println("Erro: Empréstimo não encontrado.");
+                return false;
+            }
+    
+        } catch (SQLException e) {
+            System.out.println("Erro ao atualizar prazo de devolução: " + e.getMessage());
+            return false;
+        }
+    }
+
+
 }
 
 

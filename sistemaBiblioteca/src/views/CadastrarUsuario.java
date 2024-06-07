@@ -22,8 +22,6 @@ public class CadastrarUsuario {
             dadosUsuario[2] = scanner.nextLine();
             System.out.println("Informe o nome do usuário:");
             dadosUsuario[3] = scanner.nextLine();
-            System.out.println("Informe o RA do usuário (deixe em branco se não for aluno):");
-            dadosUsuario[4] = scanner.nextLine();
 
             if (dadosUsuario[2].equals("aluno") || dadosUsuario[2].equals("funcionario") || dadosUsuario[2].equals("administrador")) {
                 dadosValidos = true;

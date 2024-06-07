@@ -20,5 +20,10 @@ public class LivroController {
         return livroDAO.devolverLivro(dados);
     }
 
+    // Método para alterar o prazo de devolução de um livro
+    public boolean alterarPrazoDevolucao(String[] dados) {
+        return livroDAO.alterarPrazoDevolucao(dados);
+    }
+
 
 }

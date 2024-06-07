@@ -8,10 +8,12 @@ import java.sql.SQLException;
 import java.util.Scanner;
 
 import dao.FuncionarioDAO;
+import dao.LivroDAO;
 import models.Credenciais;
 import utils.ConnectionSQL;
+import views.AlterarPrazoDevolucao;
 import views.CadastrarUsuario;
-import views.menus.MenuPrincipal;
+import views.EmprestarLivro;
 
 public class AdministradorController extends FuncionarioController {
     private FuncionarioDAO funcionarioDAO = new FuncionarioDAO();
@@ -39,89 +41,22 @@ public class AdministradorController extends FuncionarioController {
                 funcionarioController.processarOpcao(opcao, credenciaisValidas);
                 break;
             case 7:
-                System.out.println("Alterar Prazo devolução em desenvolvimento");
+                AlterarPrazoDevolucao alterarPrazo = new AlterarPrazoDevolucao();
+                String[] dadosAlterarPrazo = alterarPrazo.alterarPrazo();
+                LivroController adminController = new LivroController();
+                adminController.alterarPrazoDevolucao(dadosAlterarPrazo);
                 break;
             case 8:
                 System.out.println("Alterar permissões de usuarios em desenvolvimento");
                 break;
             case 9:
-                boolean cadastrar = false;
-                String[] dadosUsuario = new CadastrarUsuario().cadastrarUsuario();
-                cadastrar = insertUsuario(dadosUsuario);
-                if (cadastrar) {
-                    System.out.println("Usuário Cadastrado com sucesso!");
-                }
+                CadastrarUsuario cadastrarUsuario = new CadastrarUsuario();
+                String[] cadUsuario = cadastrarUsuario.cadastrarUsuario();
+                FuncionarioDAO funcionarioDAO = new FuncionarioDAO();
+                funcionarioDAO.adicionarFuncionario(cadUsuario);
                 break;
             default:
                 System.out.println("Opção inválida");
         }
     }
-
-    public boolean adicionarFuncionario(String nome, String login, String senha, String tipo) {
-        return funcionarioDAO.adicionarFuncionario(nome, login, senha, tipo);
-    }
-
-    public boolean insertUsuario(String[] usuarioDadoStrings) {
-        String checkLoginSql = "SELECT COUNT(*) FROM usuarios WHERE login = ?";
-        String insertSql = "INSERT INTO usuarios (login, senha, tipo, nome, ra) VALUES (?, ?, ?, ?, ?)";
-
-        try (Connection conn = ConnectionSQL.getConnection();
-            PreparedStatement checkLoginStmt = conn.prepareStatement(checkLoginSql);
-            PreparedStatement insertStmt = conn.prepareStatement(insertSql)) {
-
-            // Verificar se o login já existe
-            checkLoginStmt.setString(1, usuarioDadoStrings[0]);
-            ResultSet rs = checkLoginStmt.executeQuery();
-            if (rs.next() && rs.getInt(1) > 0) {
-                System.out.println("\nErro: Login já existente... Voltando ao menu principal.");
-                pause(5);
-                return false;
-            }
-
-            // Inserir novo usuário
-            insertStmt.setString(1, usuarioDadoStrings[0]);
-            insertStmt.setString(2, usuarioDadoStrings[1]);
-            insertStmt.setString(3, usuarioDadoStrings[2]);
-            insertStmt.setString(4, usuarioDadoStrings[3]);
-            if (usuarioDadoStrings[2].equals("aluno")) {
-                insertStmt.setString(5, usuarioDadoStrings[4]);
-            } else {
-                insertStmt.setString(5, null);
-            }
-            insertStmt.executeUpdate();
-            return true;
-        } catch (SQLException e) {
-            System.out.println(e.getMessage());
-            return false;
-        }
-    }
-
-    public boolean atualizarFuncionario(int id, String nome, String login, String senha, String tipo) {
-        return funcionarioDAO.atualizarFuncionario(id, nome, login, senha, tipo);
-    }
-
-    private void pause(int seconds) {
-        try {
-            Thread.sleep(seconds * 1000);
-        } catch (InterruptedException e) {
-            Thread.currentThread().interrupt();
-        }
-    }
 }
-
-// Adicione métodos para deletar e listar funcionários conforme necessário
-
-/*
- * } else if (dadosUsuario[2].equals("fun")) {
- * cadastrar = insertUsuario(dadosUsuario);
- * insertUsuario(dadosUsuario);
- * } else if (dadosUsuario[2].equals("admin")) {
- * cadastrar = insertUsuario(dadosUsuario);
- * insertUsuario(dadosUsuario);
- * }
- */
-// UsuarioController novoUsuario = new UsuarioController();
-
-
-                // login, senha, tipo, nome, RA
-                // if (dadosUsuario[2].equals("aluno")) {
