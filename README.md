@@ -40,15 +40,9 @@ O projeto é dividido nas seguintes camadas:
 2. **Configuração do Banco de Dados**:
     - Crie um banco de dados no MySQL:
         ```sql
-        CREATE DATABASE biblioteca;
+        CREATE DATABASE sistemabiblioteca;
         ```
-    - Importe o arquivo `schema.sql` para criar as tabelas necessárias.
-
-3. **Configuração do Maven**:
-    - Navegue até o diretório do projeto e execute:
-        ```bash
-        mvn clean install
-        ```
+    - Importe o arquivo `SistemaBiblioteca.sql` para criar as tabelas necessárias.
 
 ## Execução do Projeto
 
@@ -56,6 +50,8 @@ Para executar o projeto, execute o seguinte comando no diretório raiz do projet
 ```bash
 mvn exec:java -Dexec.mainClass="com.edaa.sistemabiblioteca.Main"
 ```
+Ou execute o *Main.java*
+
 ## Integrantes: 
 
 **Professora Rafaela:**
