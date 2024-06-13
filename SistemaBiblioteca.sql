@@ -13,6 +13,7 @@ CREATE TABLE usuarios (
 	PRIMARY KEY (`id_usuarios`)
 );
 
+INSERT INTO usuarios (login, senha, tipo, nome) VALUES ('adm', 'adm', 'administrador', 'Teste administrador');
 SELECT * FROM usuarios;
 
 # ------------------------------------------------------------------------ #
@@ -21,21 +22,21 @@ CREATE TABLE livros (
     id_livro INT NOT NULL AUTO_INCREMENT,
     titulo varchar(150) NOT NULL,
     autor varchar(150) NOT NULL,
-    isbn INT NOT NULL,
+    isbn BIGINT NOT NULL,
     categoria varchar(50) NOT NULL,
     quantidade int DEFAULT '0',
 	PRIMARY KEY (`id_livro`),
 	KEY `idx_isbn` (`isbn`)
 );
 
+INSERT INTO livros (titulo, autor, isbn, categoria) VALUES ('Dom Casmurro', 'Machado de Assis', 978871568, 'Literatura Brasileira');
 SELECT * FROM livros;
-
 # ------------------------------------------------------------------------ #
 
 CREATE TABLE emprestimos (
   id int NOT NULL AUTO_INCREMENT,
   aluno_id int DEFAULT NULL,
-  isbn int DEFAULT NULL,
+  isbn bigint DEFAULT NULL,
   data_emprestimo timestamp NULL DEFAULT NULL,
   data_devolucao timestamp NULL DEFAULT NULL,
   status boolean default true,
@@ -47,25 +48,3 @@ CREATE TABLE emprestimos (
 );
 
 SELECT * FROM emprestimos;
-
-# ----------------------------------------- Select - Insert - Update  ----------------------------------------- #
-SELECT * FROM usuarios;
-
-INSERT INTO usuarios (login, senha, tipo, nome) VALUES ('adm', 'adm', 'administrador', 'Teste administrador');
-
-UPDATE usuarios SET nome = 'José Luiz' WHERE id_usuarios = 1;
-# ------------------------------------------------------------------------------------------------------------- #
-SELECT * FROM livros;
-
-INSERT INTO livros (titulo, autor, isbn, categoria) VALUES ('Dom Casmurro', 'Machado de Assis', 978871568, 'Literatura Brasileira');
-
-UPDATE livros SET quantidade = 5 WHERE id_livro = 1;
-# ------------------------------------------------------------------------------------------------------------- #
-SELECT * FROM emprestimos;
-
-UPDATE emprestimos SET status = 0 WHERE aluno_id = 1;
-
-# ------------------------------------------------------------------------------------------------------------- #
-# DROP TABLE usuarios
-
-RENAME TABLE usuarios TO usuariosOLD;
