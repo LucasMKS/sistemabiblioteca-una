@@ -29,6 +29,7 @@ public class AlunoController {
                 ClearConsole.clear();
                 LivroDAO statusEmprestimo = new LivroDAO();
                 Scanner scanner = new Scanner(System.in);
+                System.out.println("Digite seu RA:");
                 String ra = scanner.nextLine();
                 List<String> livrosEmprestados = statusEmprestimo.verificarStatusEmprestimo(ra);
 
@@ -45,7 +46,6 @@ public class AlunoController {
                 System.out.println("Opção inválida");
         }
     }
-
 
     public static void verificarCadastro(Credenciais credenciaisValidas) {
         String sql = "SELECT login, tipo, nome FROM usuarios WHERE login = ?";
@@ -100,5 +100,9 @@ public class AlunoController {
         } catch (SQLException e) {
             System.out.println("Erro ao listar usuário: " + e.getMessage());
         }
+    }
+
+    public static void verificarEmprestimo(Credenciais credenciaisValidas) {
+
     }
 }

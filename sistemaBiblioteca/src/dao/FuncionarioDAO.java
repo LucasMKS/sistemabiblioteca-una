@@ -5,6 +5,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.Scanner;
 
 import utils.ConnectionSQL;
 
@@ -69,6 +70,49 @@ public class FuncionarioDAO {
         }
     }
 
+    public boolean removerFuncionario(String ra, Scanner scanner){
+        String getAlunoIdSql = "SELECT id_usuarios FROM usuarios WHERE ra = ?";
+        String update_sql = "UPDATE usuarios SET tipo = 'null' WHERE ra = ?";
+        String delete_sql = "DELETE FROM emprestimos WHERE aluno_id = ?";
+        try (Connection conn = ConnectionSQL.getConnection();
+            PreparedStatement pstmt = conn.prepareStatement(update_sql);
+            PreparedStatement getAlunoIdStmt = conn.prepareStatement(getAlunoIdSql);
+            PreparedStatement pstmtdel = conn.prepareStatement(delete_sql)) {
+
+            System.out.println("Realmente deseja remover o funcionario de RA" + ra + "? (1 - Sim / 0 - Não)");
+            int opcao = scanner.nextInt();
+            if (opcao == 0) {
+                return false;
+            }
+
+            int alunoId = getAlunoIdFromRa(getAlunoIdStmt, ra);
+            if (alunoId == -1) {
+                System.out.println("Erro: Aluno não encontrado.");
+                return false;
+            }
+
+            System.out.println("Removendo funcionario...");
+            pstmt.setString(1, ra);
+            pstmt.executeUpdate();
+
+            pstmtdel.setInt(1, alunoId);
+            pstmtdel.executeUpdate();
+            return true;
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+            return false;
+        }
+    }
+
+    private int getAlunoIdFromRa(PreparedStatement stmt, String ra) throws SQLException {
+        stmt.setString(1, ra);
+        ResultSet rs = stmt.executeQuery();
+        if (rs.next()) {
+            return rs.getInt("id_usuarios");
+        }
+        return -1; // Retornar -1 se o aluno não for encontrado
+    }
+
     private void pause(int seconds) {
         try {
             Thread.sleep(seconds * 1000);
@@ -76,4 +120,5 @@ public class FuncionarioDAO {
             Thread.currentThread().interrupt();
         }
     }
+    
 }

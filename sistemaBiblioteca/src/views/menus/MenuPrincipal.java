@@ -37,6 +37,7 @@ public class MenuPrincipal {
                         break;  
                     default:
                         System.out.println("Voce nao tem permissao para utilizar o sistema!");
+                        System.exit(0);
                         break;
                 }     
                 System.out.println("\n\nDeseja continuar no menu? (1 - Sim / 0 - Não)");
@@ -48,8 +49,6 @@ public class MenuPrincipal {
             }
     }
     
-
-
     private void limparScanner(Scanner scanner) {
         if (scanner.hasNextLine()) {
             scanner.nextLine();

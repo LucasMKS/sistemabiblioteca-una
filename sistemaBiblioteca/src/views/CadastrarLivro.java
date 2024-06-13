@@ -18,7 +18,7 @@ public class CadastrarLivro {
 
         System.out.println("Informe o título do livro:");
         dadosLivro[0] = scanner.nextLine();
-        System.out.println("Informe o autor do livro:");
+        System.out.println("Informe o(a) autor(a) do livro:");
         dadosLivro[1] = scanner.nextLine();
         System.out.println("Informe o ISBN:");
         dadosLivro[2] = scanner.nextLine();
