@@ -5,7 +5,6 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
-import java.util.Scanner;
 
 import dao.LivroDAO;
 import models.Credenciais;
@@ -28,15 +27,12 @@ public class AlunoController {
             case 3:
                 ClearConsole.clear();
                 LivroDAO statusEmprestimo = new LivroDAO();
-                Scanner scanner = new Scanner(System.in);
-                System.out.println("Digite seu RA:");
-                String ra = scanner.nextLine();
-                List<String> livrosEmprestados = statusEmprestimo.verificarStatusEmprestimo(ra);
+                List<String> livrosEmprestados = statusEmprestimo.verificarStatusEmprestimo(credenciaisValidas);
 
                 if (livrosEmprestados.isEmpty()) {
-                    System.out.println("Nenhum livro emprestado para o aluno com RA: " + ra);
+                    System.out.println("Nenhum livro emprestado no momento!");
                 } else {
-                    System.out.println("Livros emprestados para o aluno com RA: " + ra);
+                    System.out.println("Livros emprestados:");
                     for (String livro : livrosEmprestados) {
                         System.out.println(livro);
                     }
@@ -48,8 +44,7 @@ public class AlunoController {
     }
 
     public static void verificarCadastro(Credenciais credenciaisValidas) {
-        String sql = "SELECT login, tipo, nome FROM usuarios WHERE login = ?";
-        String sqlAluno = "SELECT login, tipo, nome, RA FROM usuarios WHERE login = ?";
+        String sql = "SELECT login, tipo, nome, matricula FROM usuarios WHERE login = ?";
 
         try (Connection conn = ConnectionSQL.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
@@ -63,36 +58,16 @@ public class AlunoController {
                     String login = rs.getString("login");
                     String tipo = rs.getString("tipo");
                     String nome = rs.getString("nome");
-
-                    // Imprimir cabeçalhos
-                    if (tipo.equals("aluno")) {
-                        // Se for aluno, adicionar coluna de RA
-                        System.out.printf(" %-8s", "RA");
-                    }
-                    System.out.printf("%-20s %-20s %-30s", 
-                                      "Login", "Tipo", "Nome");
-                    System.out.println("\n--------------------------------------------------------------");
-
-
-                    if (tipo.equals("aluno")) {
-                        // Obter o RA se for aluno
-                        try (PreparedStatement pstmtAluno = conn.prepareStatement(sqlAluno)) {
-                            pstmtAluno.setString(1, credenciaisValidas.getLogin());
-                            try (ResultSet rsAluno = pstmtAluno.executeQuery()) {
-                                if (rsAluno.next()) {
-                                    String ra = rsAluno.getString("RA");
-                                    System.out.printf(" %-8s", ra);
-                                }
-                            }
-                        }
-                    }
-                    // Imprimir dados
-                    System.out.printf("%-20s %-20s %-30s", 
-                                      login, tipo, nome);
-
+                    int matricula = rs.getInt("matricula");
                     
+                    System.out.printf("%-20s %-20s %-30s %-30s", 
+                                      "Login", "Tipo", "Nome", "Matricula");
+                    System.out.println("\n-------------------------------------------------------------------------------------");
 
-                    System.out.println();
+                    // Imprimir dados
+                    System.out.printf("%-20s %-20s %-30s %-30s \n", 
+                                      login, tipo, nome, matricula);                  
+
                 } else {
                     System.out.println("Usuário não encontrado.");
                 }
@@ -102,7 +77,5 @@ public class AlunoController {
         }
     }
 
-    public static void verificarEmprestimo(Credenciais credenciaisValidas) {
 
-    }
 }

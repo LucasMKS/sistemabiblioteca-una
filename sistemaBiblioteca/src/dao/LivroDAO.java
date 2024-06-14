@@ -10,6 +10,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
+import models.Credenciais;
 import models.Livro;
 import utils.ConnectionSQL;
 
@@ -64,7 +65,7 @@ public class LivroDAO {
         LocalDateTime dataDevolucao = now.plusDays(7);
         String dataDevolucaoStr = dataDevolucao.format(formatter);
 
-        String getAlunoIdSql = "SELECT id_usuarios FROM usuarios WHERE ra = ?";
+        String getAlunoIdSql = "SELECT id_usuarios FROM usuarios WHERE matricula = ?";
         String checkQuantidadeSql = "SELECT quantidade FROM livros WHERE isbn = ?";
         String checkEmprestadosSql = "SELECT COUNT(*) AS emprestados FROM emprestimos WHERE isbn = ? AND status = true";
         String checkEmprestimoAlunoSql = "SELECT COUNT(*) AS emprestados FROM emprestimos WHERE aluno_id = ? AND isbn = ? AND status = true";
@@ -81,7 +82,7 @@ public class LivroDAO {
              PreparedStatement insertStmt = conn.prepareStatement(inserirEmprestimoSql)) {
 
             // Obter o ID do aluno a partir do RA
-            int alunoId = getAlunoIdFromRa(getAlunoIdStmt, dados[0]);
+            int alunoId = getAlunoIdFromMatricula(getAlunoIdStmt, dados[0]);
             if (alunoId == -1) {
                 System.out.println("Erro: Aluno não encontrado.");
                 return false;
@@ -175,19 +176,19 @@ public class LivroDAO {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
         String dataDevolucaoStr = now.format(formatter);
 
-        String getAlunoIdSql = "SELECT id_usuarios FROM usuarios WHERE ra = ?";
+        String getAlunoIdSql = "SELECT id_usuarios FROM usuarios WHERE matricula = ?";
         String sql = "UPDATE emprestimos SET data_devolucao = ?, status = false WHERE aluno_id = ? AND isbn = ? AND status = true";
 
         try (PreparedStatement getAlunoIdStmt = conn.prepareStatement(getAlunoIdSql);
              PreparedStatement stmt = conn.prepareStatement(sql)) {
 
-            // Obter o ID do aluno a partir do RA
-            int alunoId = getAlunoIdFromRa(getAlunoIdStmt, dados[0]);
+            // Obter o ID do usuario através da matricula
+            int alunoId = getAlunoIdFromMatricula(getAlunoIdStmt, dados[0]);
             if (alunoId == -1) {
                 System.out.println("Erro: Aluno não encontrado.");
                 return false;
             }
-            dados[0] = String.valueOf(alunoId); // Atualiza o array de dados com o ID do aluno
+            dados[0] = String.valueOf(alunoId); // Atualiza o array de dados com o ID do usuario
 
             // Atualizar a devolução do livro
             stmt.setString(1, dataDevolucaoStr);
@@ -219,19 +220,18 @@ public class LivroDAO {
     }
 
     public static void listarLivros() {
-        String sql = "SELECT id_livro, titulo, autor, isbn, categoria, quantidade FROM livros";
+        String sql = "SELECT titulo, autor, isbn, categoria, quantidade FROM livros";
 
         try (Connection conn = ConnectionSQL.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql);
              ResultSet rs = pstmt.executeQuery()) {
 
             // Imprimir cabeçalhos
-            System.out.printf("%-5s %-30s %-20s %-15s %-25s %-10s%n", 
-                              "ID", "Título", "Autor", "ISBN", "Categoria", "Quantidade");
-            System.out.println("----------------------------------------------------------------------------------------------------------------");
+            System.out.printf("%-30s %-20s %-15s %-25s %-10s%n", 
+                              "Título", "Autor", "ISBN", "Categoria", "Quantidade");
+            System.out.println("------------------------------------------------------------------------------------------------");
 
             while (rs.next()) {
-                int idLivro = rs.getInt("id_livro");
                 String titulo = rs.getString("titulo");
                 String autor = rs.getString("autor");
                 String isbn = rs.getString("isbn");
@@ -239,8 +239,8 @@ public class LivroDAO {
                 int quantidade = rs.getInt("quantidade");
 
                 // Imprimir dados
-                System.out.printf("%-5d %-30s %-20s %-15s %-25s %-10d%n", 
-                                  idLivro, titulo, autor, isbn, categoria, quantidade);
+                System.out.printf("%-30s %-20s %-15s %-25s %-10d%n", 
+                                  titulo, autor, isbn, categoria, quantidade);
             }
 
         } catch (SQLException e) {
@@ -272,8 +272,8 @@ public class LivroDAO {
         return "Desconhecido";
     }
 
-    private int getAlunoIdFromRa(PreparedStatement stmt, String ra) throws SQLException {
-        stmt.setString(1, ra);
+    private int getAlunoIdFromMatricula(PreparedStatement stmt, String matricula) throws SQLException {
+        stmt.setString(1, matricula);
         ResultSet rs = stmt.executeQuery();
         if (rs.next()) {
             return rs.getInt("id_usuarios");
@@ -281,8 +281,7 @@ public class LivroDAO {
         return -1; // Retornar -1 se o aluno não for encontrado
     }
 
-    public List<String> verificarStatusEmprestimo(String ra) {
-        String getAlunoIdSql = "SELECT id_usuarios FROM usuarios WHERE ra = ?";
+    public List<String> verificarStatusEmprestimo(Credenciais credenciais) {
         String query = "SELECT livros.titulo, emprestimos.data_emprestimo, emprestimos.data_devolucao " +
                        "FROM emprestimos " +
                        "JOIN livros ON emprestimos.isbn = livros.isbn " +
@@ -291,18 +290,10 @@ public class LivroDAO {
         List<String> livrosEmprestados = new ArrayList<>();
 
         try (Connection conn = ConnectionSQL.getConnection();
-             PreparedStatement getAlunoIdStmt = conn.prepareStatement(getAlunoIdSql);
              PreparedStatement stmt = conn.prepareStatement(query)) {
 
-            // Obtém o aluno_id a partir do RA
-            int alunoId = getAlunoIdFromRa(getAlunoIdStmt, ra);
-            if (alunoId == -1) {
-                System.out.println("Erro: Aluno não encontrado.");
-                return livrosEmprestados;
-            }
-
             // Define o parâmetro para a consulta de empréstimos
-            stmt.setInt(1, alunoId);
+            stmt.setInt(1, credenciais.getId());
             ResultSet rs = stmt.executeQuery();
 
             // Processa os resultados da consulta

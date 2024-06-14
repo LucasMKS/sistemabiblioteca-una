@@ -9,7 +9,7 @@ CREATE TABLE usuarios (
     senha varchar(55) NOT NULL,
     tipo varchar(30) NOT NULL,
     nome varchar(150) NOT NULL,
-    ra INT DEFAULT NULL,
+    matricula INT DEFAULT NULL,
 	PRIMARY KEY (`id_usuarios`)
 );
 
