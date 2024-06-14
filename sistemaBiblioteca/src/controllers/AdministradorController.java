@@ -3,6 +3,7 @@ package controllers;
 import java.util.Scanner;
 import dao.FuncionarioDAO;
 import models.Credenciais;
+import views.AlterarPermissao;
 import views.AlterarPrazoDevolucao;
 import views.CadastrarUsuario;
 
@@ -41,11 +42,17 @@ public class AdministradorController extends FuncionarioController {
                 FuncionarioDAO removerFuncionarioDAO = new FuncionarioDAO();
                 removerFuncionarioDAO.removerFuncionario(ra, scanner);
                 break;            
-            case 9:
+                case 9:
                 CadastrarUsuario cadastrarUsuario = new CadastrarUsuario();
                 String[] cadUsuario = cadastrarUsuario.cadastrarUsuario();
                 FuncionarioDAO funcionarioDAO = new FuncionarioDAO();
                 funcionarioDAO.adicionarFuncionario(cadUsuario);
+                break;
+                case 10:
+                AlterarPermissao alterarPermissao = new AlterarPermissao();
+                String[] dadosUsuario = alterarPermissao.alterarPermissao();
+                FuncionarioDAO alterarPermissaoDAO = new FuncionarioDAO();
+                alterarPermissaoDAO.atualizarFuncionario(dadosUsuario);
                 break;
             default:
                 System.out.println("Opção inválida");

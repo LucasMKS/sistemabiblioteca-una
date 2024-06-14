@@ -6,6 +6,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Scanner;
+import java.util.logging.Logger;
 
 import utils.ConnectionSQL;
 
@@ -50,17 +51,19 @@ public class FuncionarioDAO {
             return false;
         }
     }
-    
 
-    public boolean atualizarFuncionario(int id, String nome, String login, String senha, String tipo) {
-        String sql = "UPDATE funcionarios SET nome = ?, login = ?, senha = ?, tipo = ? WHERE id = ?";
+
+    public boolean atualizarFuncionario(String dadosUsuario[]) {
+        if (dadosUsuario == null || dadosUsuario.length < 2 || dadosUsuario[0] == null || dadosUsuario[1] == null) {
+            throw new IllegalArgumentException("Dados de usuário inválidos");
+        }
+
+        String sql = "UPDATE usuarios SET tipo = ? WHERE login = ?";
+
         try (Connection conn = ConnectionSQL.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
-            pstmt.setString(1, nome);
-            pstmt.setString(2, login);
-            pstmt.setString(3, senha);
-            pstmt.setString(4, tipo);
-            pstmt.setInt(5, id);
+            pstmt.setString(1, dadosUsuario[1]);
+            pstmt.setString(2, dadosUsuario[0]);
             pstmt.executeUpdate();
             return true;
         } catch (SQLException e) {
@@ -69,29 +72,29 @@ public class FuncionarioDAO {
         }
     }
 
-    public boolean removerFuncionario(String ra, Scanner scanner){
-        String getAlunoIdSql = "SELECT id_usuarios FROM usuarios WHERE ra = ?";
-        String update_sql = "UPDATE usuarios SET tipo = 'null' WHERE ra = ?";
+    public boolean removerFuncionario(String matricula, Scanner scanner){
+        String getAlunoIdSql = "SELECT id_usuarios FROM usuarios WHERE matricula = ?";
+        String update_sql = "UPDATE usuarios SET tipo = 'null' WHERE matricula = ?";
         String delete_sql = "DELETE FROM emprestimos WHERE aluno_id = ?";
         try (Connection conn = ConnectionSQL.getConnection();
             PreparedStatement pstmt = conn.prepareStatement(update_sql);
             PreparedStatement getAlunoIdStmt = conn.prepareStatement(getAlunoIdSql);
             PreparedStatement pstmtdel = conn.prepareStatement(delete_sql)) {
 
-            System.out.println("Realmente deseja remover o funcionario de RA" + ra + "? (1 - Sim / 0 - Não)");
+            System.out.println("Realmente deseja remover o funcionario de matricula" + matricula + "? (1 - Sim / 0 - Não)");
             int opcao = scanner.nextInt();
             if (opcao == 0) {
                 return false;
             }
 
-            int alunoId = getAlunoIdFromRa(getAlunoIdStmt, ra);
+            int alunoId = getAlunoIdFromMatricula(getAlunoIdStmt, matricula);
             if (alunoId == -1) {
                 System.out.println("Erro: Aluno não encontrado.");
                 return false;
             }
 
             System.out.println("Removendo funcionario...");
-            pstmt.setString(1, ra);
+            pstmt.setString(1, matricula);
             pstmt.executeUpdate();
 
             pstmtdel.setInt(1, alunoId);
@@ -103,7 +106,7 @@ public class FuncionarioDAO {
         }
     }
 
-    private int getAlunoIdFromRa(PreparedStatement stmt, String ra) throws SQLException {
+    private int getAlunoIdFromMatricula(PreparedStatement stmt, String ra) throws SQLException {
         stmt.setString(1, ra);
         ResultSet rs = stmt.executeQuery();
         if (rs.next()) {
