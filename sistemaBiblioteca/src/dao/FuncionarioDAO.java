@@ -13,14 +13,13 @@ public class FuncionarioDAO {
 
     public boolean adicionarFuncionario(String[] dadosUsuarios) {
         String checkLoginSql = "SELECT COUNT(*) FROM usuarios WHERE login = ?";
-        String insertSql = "INSERT INTO usuarios (login, senha, tipo, nome, ra) VALUES (?, ?, ?, ?, ?)";
-        String lastRaSql = "SELECT MAX(ra) FROM usuarios";
+        String insertSql = "INSERT INTO usuarios (login, senha, tipo, nome, matricula) VALUES (?, ?, ?, ?, ?)";
+        String lastMatriculaSql = "SELECT MAX(matricula) FROM usuarios";
     
         try (Connection conn = ConnectionSQL.getConnection();
              PreparedStatement checkLoginStmt = conn.prepareStatement(checkLoginSql);
              PreparedStatement insertStmt = conn.prepareStatement(insertSql);
-             Statement lastRaStmt = conn.createStatement()) {
-    
+             Statement lastMatriculaStmt = conn.createStatement()) {
             // Verificar se o login já existe
             checkLoginStmt.setString(1, dadosUsuarios[0]);
             ResultSet rs = checkLoginStmt.executeQuery();
@@ -31,10 +30,10 @@ public class FuncionarioDAO {
             }
     
             // Obter o último RA cadastrado
-            int lastRa = 15129; // Valor inicial para o caso de não haver RA cadastrado
-            ResultSet lastRaRs = lastRaStmt.executeQuery(lastRaSql);
-            if (lastRaRs.next() && lastRaRs.getInt(1) > 0) {
-                lastRa = lastRaRs.getInt(1);
+            int lastMatricula = 15129; // Valor inicial para o caso de não haver RA cadastrado
+            ResultSet lastMatriculaRs = lastMatriculaStmt.executeQuery(lastMatriculaSql);
+            if (lastMatriculaRs.next() && lastMatriculaRs.getInt(1) > 0) {
+                lastMatricula = lastMatriculaRs.getInt(1);
             }
     
             // Inserir novo usuário
@@ -42,7 +41,7 @@ public class FuncionarioDAO {
             insertStmt.setString(2, dadosUsuarios[1]);
             insertStmt.setString(3, dadosUsuarios[2]);
             insertStmt.setString(4, dadosUsuarios[3]);
-            insertStmt.setInt(5, lastRa + 1);
+            insertStmt.setInt(5, lastMatricula + 1);
             insertStmt.executeUpdate();
             System.out.println("\nUsuário cadastrado com sucesso!");
             return true;
