@@ -15,7 +15,7 @@ public class RemoverPermissaoUsuario {
         boolean dadosValidos = false;
 
         while (!dadosValidos) {
-            System.out.println("Informe o RA do usuário:");
+            System.out.println("Informe a Matricula do usuário:");
             dadosUsuario[0] = scanner.nextLine();
         }
 
