@@ -10,7 +10,7 @@ import java.sql.SQLException;
 
 public class AutenticacaoController {
     public Credenciais autenticarUsuario(Credenciais credenciais) {
-        String query = "SELECT nome, tipo FROM usuarios WHERE login = ? AND senha = ?";
+        String query = "SELECT nome, tipo, id_usuarios FROM usuarios WHERE login = ? AND senha = ?";
         Credenciais usuarioAutenticado = null;
         
         try (Connection connection = ConnectionSQL.getConnection();
@@ -23,7 +23,8 @@ public class AutenticacaoController {
                 if (resultSet.next()) {
                     String nome = resultSet.getString("nome");
                     String tipo = resultSet.getString("tipo");
-                    usuarioAutenticado = new Credenciais(credenciais.getLogin(), credenciais.getSenha(), nome, tipo);
+                    int id = resultSet.getInt("id_usuarios");
+                    usuarioAutenticado = new Credenciais(credenciais.getLogin(), credenciais.getSenha(), nome, tipo, id);
                 }
             }
         } catch (SQLException e) {

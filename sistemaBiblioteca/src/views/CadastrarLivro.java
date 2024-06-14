@@ -1,7 +1,5 @@
 package views;
-
 import java.util.Scanner;
-
 import utils.ClearConsole;
 
 public class CadastrarLivro {

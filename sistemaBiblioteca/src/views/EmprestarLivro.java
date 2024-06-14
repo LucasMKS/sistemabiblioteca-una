@@ -12,7 +12,7 @@ public class EmprestarLivro {
 
         String[] dados = new String[2];
 
-        System.out.println("Informe o RA do usuário:");
+        System.out.println("Informe a Matricula do usuário:");
         dados[0] = scanner.nextLine();
         System.out.println("Informe o ISBN do livro:");
         dados[1] = scanner.nextLine();
