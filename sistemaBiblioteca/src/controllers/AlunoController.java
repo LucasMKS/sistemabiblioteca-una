@@ -7,7 +7,12 @@ import models.Credenciais;
 import utils.ClearConsole;
 
 public class AlunoController {
-
+    /**
+     * Processa a opção escolhida pelo aluno.
+     * 
+     * @param opcao              A opção escolhida pelo aluno.
+     * @param credenciaisValidas As credenciais válidas do aluno.
+     */
     public void processarOpcao(int opcao, Credenciais credenciaisValidas) {
         switch (opcao) {
             case 1:

@@ -9,12 +9,17 @@ import models.Credenciais;
 import utils.ConnectionSQL;
 
 public class AlunoDAO {
-
+    /**
+     * Verifica se um usuário está cadastrado no banco de dados com base nas
+     * credenciais fornecidas.
+     * 
+     * @param credenciaisValidas as credenciais do usuário a serem verificadas
+     */
     public static void verificarCadastro(Credenciais credenciaisValidas) {
         String sql = "SELECT login, tipo, nome, matricula FROM usuarios WHERE login = ?";
 
         try (Connection conn = ConnectionSQL.getConnection();
-             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+                PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
             // Define o parâmetro do login do usuário logado
             pstmt.setString(1, credenciaisValidas.getLogin());
@@ -26,14 +31,15 @@ public class AlunoDAO {
                     String tipo = rs.getString("tipo");
                     String nome = rs.getString("nome");
                     int matricula = rs.getInt("matricula");
-                    
-                    System.out.printf("%-20s %-20s %-30s %-30s", 
-                                      "Login", "Tipo", "Nome", "Matricula");
-                    System.out.println("\n-------------------------------------------------------------------------------------");
+
+                    System.out.printf("%-20s %-20s %-30s %-30s",
+                            "Login", "Tipo", "Nome", "Matricula");
+                    System.out.println(
+                            "\n-------------------------------------------------------------------------------------");
 
                     // Imprimir dados
-                    System.out.printf("%-20s %-20s %-30s %-30s \n", 
-                                      login, tipo, nome, matricula);                  
+                    System.out.printf("%-20s %-20s %-30s %-30s \n",
+                            login, tipo, nome, matricula);
 
                 } else {
                     System.out.println("Usuário não encontrado.");
@@ -43,5 +49,5 @@ public class AlunoDAO {
             System.out.println("Erro ao listar usuário: " + e.getMessage());
         }
     }
-    
+
 }

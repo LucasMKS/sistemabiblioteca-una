@@ -6,7 +6,12 @@ import views.EmprestarLivro;
 import views.DevolverLivro;
 
 public class FuncionarioController {
-
+    /**
+     * Processa a opção escolhida pelo funcionário.
+     * 
+     * @param opcao              A opção escolhida.
+     * @param credenciaisValidas As credenciais válidas do funcionário.
+     */
     public void processarOpcao(int opcao, Credenciais credenciaisValidas) {
         AlunoController alunoController = new AlunoController();
         switch (opcao) {
@@ -42,8 +47,8 @@ public class FuncionarioController {
                 break;
             default:
                 System.out.println("Opção inválida");
-         
+
         }
     }
-    // Adicionar mais funcionalidades conforme a necessidade do sistema
+
 }
