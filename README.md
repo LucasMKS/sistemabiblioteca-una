@@ -42,6 +42,7 @@ O projeto é dividido nas seguintes camadas:
         CREATE DATABASE sistemabiblioteca;
         ```
     - Importe o arquivo `SistemaBiblioteca.sql` para criar as tabelas necessárias.
+    - Talvez seja necessario configurar o login e senha do MySQL no `ConnectionSQL.java` em \utils
 
 ## Execução do Projeto
 
