@@ -6,9 +6,15 @@ import java.sql.SQLException;
 
 public class ConnectionSQL {
     private static final String URL = "jdbc:mysql://localhost:3306/sistemabiblioteca";
-    private static final String USER = "root"; 
-    private static final String PASSWORD = "admin"; 
+    private static final String USER = "root";
+    private static final String PASSWORD = "admin";
 
+    /**
+     * Obtém uma conexão com o banco de dados.
+     * 
+     * @return A conexão estabelecida.
+     * @throws RuntimeException se ocorrer um erro ao conectar ao banco de dados.
+     */
     public static Connection getConnection() {
         try {
             return DriverManager.getConnection(URL, USER, PASSWORD);

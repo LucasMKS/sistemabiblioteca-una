@@ -1,4 +1,5 @@
 package views;
+
 import java.util.Scanner;
 import utils.ClearConsole;
 
@@ -6,6 +7,13 @@ public class CadastrarLivro {
 
     private Scanner scanner;
 
+    /**
+     * Método para cadastrar um livro.
+     * Este método solicita ao usuário informações sobre o livro a ser cadastrado,
+     * como título, autor, ISBN, categoria e quantidade.
+     * 
+     * @return Um array de strings com os dados do livro cadastrado.
+     */
     public String[] cadastrarLivro() {
 
         ClearConsole.clear();

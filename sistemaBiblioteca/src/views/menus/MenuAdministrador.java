@@ -1,6 +1,11 @@
 package views.menus;
 
 public class MenuAdministrador extends MenuFuncionario {
+    /**
+     * Mostra as opções disponíveis para um administrador.
+     * Além das opções de funcionário, inclui opções específicas para
+     * administradores.
+     */
     public void mostrarOpcoes() {
         new MenuFuncionario().mostrarOpcoes();
         System.out.println("7. Alterar prazo devolucao");

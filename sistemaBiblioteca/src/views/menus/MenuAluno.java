@@ -2,8 +2,10 @@ package views.menus;
 
 import utils.ClearConsole;
 
-public class MenuAluno{
-
+public class MenuAluno {
+    /**
+     * Método para mostrar as opções disponíveis no menu.
+     */
     public void mostrarOpcoes() {
         ClearConsole.clear();
         System.out.println("1. Consultar Livros");

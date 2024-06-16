@@ -3,6 +3,9 @@ package utils;
 import java.io.IOException;
 
 public class ClearConsole {
+    /**
+     * Método estático para limpar o console.
+     */
     public static void clear() {
         try {
             if (System.getProperty("os.name").contains("Windows")) {
