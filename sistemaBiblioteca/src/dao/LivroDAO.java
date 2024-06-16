@@ -227,7 +227,7 @@ public class LivroDAO {
              ResultSet rs = pstmt.executeQuery()) {
 
             // Imprimir cabeçalhos
-            System.out.printf("%-30s %-20s %-15s %-25s %-10s%n", 
+            System.out.printf("%-50s %-20s %-15s %-25s %-10s%n", 
                               "Título", "Autor", "ISBN", "Categoria", "Quantidade");
             System.out.println("------------------------------------------------------------------------------------------------");
 
