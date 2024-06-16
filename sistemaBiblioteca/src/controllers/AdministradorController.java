@@ -32,9 +32,9 @@ public class AdministradorController extends FuncionarioController {
                 break;
             case 7:
                 AlterarPrazoDevolucao alterarPrazo = new AlterarPrazoDevolucao();
-                String[] dadosAlterarPrazo = alterarPrazo.alterarPrazo();
+                String[] dados = alterarPrazo.alterarPrazo();
                 LivroController adminController = new LivroController();
-                adminController.alterarPrazoDevolucao(dadosAlterarPrazo);
+                adminController.alterarPrazoDevolucao(dados);
                 break;
                 case 8:
                 System.out.println("Informe o RA do usuario: ");
