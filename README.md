@@ -26,7 +26,6 @@ O projeto é dividido nas seguintes camadas:
 ## Requisitos
 
 - **Java**: Versão 8 ou superior
-- **Maven**
 - **MySQL**
 
 ## Configuração do Ambiente
@@ -56,15 +55,15 @@ Ou execute o *Main.java*
 
 **Professora Rafaela:**
 
-- Alan Junio Vila Nova Pereira
-- Hugo Henrique Rodrigues de Almeida
-- João Victor
-- Tiago de Britto Antunes
-- Wallace Neres Pereira de Souza
+- Alan Junio Vila Nova Pereira - 42025255
+- Hugo Henrique Rodrigues de Almeida - 422140627
+- João Victor Alves - 422142090
+- Tiago de Britto Antunes - 
+- Wallace Neres Pereira de Souza - 422220377
 
 
 **Professor Daniel:**
 
 - Gabriel Galdino
-- Lucas Marques da Silva
+- Lucas Marques da Silva - 42125351
 - César Martins
