@@ -65,6 +65,6 @@ Ou execute o *Main.java*
 
 **Professor Daniel:**
 
-- Gabriel Galdino
+- Gabriel Silva Galdino - 42124664
 - Lucas Marques da Silva - 42125351
-- César Martins
+- César Augusto Ferreira Martins
