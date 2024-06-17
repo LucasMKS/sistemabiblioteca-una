@@ -59,7 +59,7 @@ Ou execute o *Main.java*
 - Alan Junio Vila Nova Pereira - 42025255
 - Hugo Henrique Rodrigues de Almeida - 422140627
 - João Victor Alves - 422142090
-- Tiago de Britto Antunes - 
+- Tiago de Britto Antunes - 42025558
 - Wallace Neres Pereira de Souza - 422220377
 
 
